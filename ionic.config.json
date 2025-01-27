@@ -1,0 +1,7 @@
+{
+  "name": "ElFortinPanaderiaApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
