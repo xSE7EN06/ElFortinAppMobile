@@ -1,0 +1,26 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh; // Centrado vertical
+    margin-top: 0;
+  }
+  
+  .card {
+    width: 90%;
+    max-width: 400px; // Tamaño máximo
+    text-align: center;
+    border-radius: 15px; // Esquinas redondeadas
+  }
+
+.logo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.logo {
+    width: 200px; // Tamaño fijo para el logo
+    height: auto; // Mantiene la proporción
+  }
