@@ -2,5 +2,33 @@
 <ion-content>
   <app-logo></app-logo>
 
-  
+  <form [formGroup]="form">
+
+    <app-custom-input
+    autocomplete="email"
+    icon="mail-outline"
+    [control]="form.controls.email"
+    type="email"
+    label="Correo"
+    [errorText]="getErrorMessage('email')"
+    ></app-custom-input>
+
+    <app-custom-input
+    icon="lock-closed-outline"
+    [control]="form.controls.password"
+    type="password"
+    label="Contraseña"
+    [errorText]="getErrorMessage('password')"
+    ></app-custom-input>
+
+    <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
+        Iniciar Sesión
+        <ion-icon name="log-in-outline" slot="end"></ion-icon>
+    </ion-button>
+
+    <ion-button expand="block"  fill="outline" mode="ios" class="sing-up" routerLink="/sign-up">
+        Crear Cuenta
+        <ion-icon name="person-add-outline" slot="end"></ion-icon>
+    </ion-button>
+</form>
 </ion-content>
