@@ -21,14 +21,22 @@
     [errorText]="getErrorMessage('password')"
     ></app-custom-input>
 
+    <app-custom-input
+    icon="lock-closed-outline"
+    [control]="form.controls.password"
+    type="password"
+    label="Confirmar contraseña"
+    [errorText]="getErrorMessage('password')"
+    ></app-custom-input>
+
     <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
-        Iniciar Sesión
-        <ion-icon name="log-in-outline" slot="end"></ion-icon>
+        Crear
+        <ion-icon name="person-add-outline" slot="end"></ion-icon>
     </ion-button>
 
-    <ion-button expand="block"  fill="outline" mode="ios" class="sing-up" routerLink="/sign-up">
-        Crear Cuenta
-        <ion-icon name="person-add-outline" slot="end"></ion-icon>
+    <ion-button expand="block"  fill="outline" mode="ios" class="sing-up" routerLink="/login">
+        Iniciar Sesión
+        <ion-icon name="log-in-outline" slot="end"></ion-icon>
     </ion-button>
 </form>
 </ion-content>
