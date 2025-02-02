@@ -10,6 +10,15 @@
         [control]="form.controls.email"
         type="email"
         label="Correo"
+        [errorText]="getErrorMessage('email')"
+        ></app-custom-input>
+
+        <app-custom-input
+        icon="lock-closed-outline"
+        [control]="form.controls.password"
+        type="password"
+        label="Contraseña"
+        [errorText]="getErrorMessage('password')"
         ></app-custom-input>
     </form>
 </ion-content>

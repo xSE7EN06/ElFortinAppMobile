@@ -1,11 +1,15 @@
-<ion-item class="custom-input" lines="none">
+<ion-item class="custom-input" lines="none"> 
   <ion-icon color="primary" *ngIf="icon" slot="start" [name]="icon"></ion-icon>
 
-  <ion-input
+  <ion-input  
   [type]="type"
   [autocomplete]="autocomplete"
   [label]="label"
   [formControl]="control"
+  label-placement="floating"
+  fill="outline"
+  class="inputs"
+  [errorText]="errorText"
   >
   </ion-input>
 </ion-item>
