@@ -1,0 +1,64 @@
+<ion-content>
+  <ion-tabs>
+    <ion-tab tab="home">
+      <div id="home-page">
+        <app-header title="Inicio"></app-header>
+        <ion-content>
+          <div class="example-content">Listen now content</div>
+          <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+            <ion-fab-button>
+              <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </ion-content>
+      </div>
+    </ion-tab>
+
+    <ion-tab tab="menu">
+      <div id="menu-page">
+        <app-header title="Servicios"></app-header>
+        <ion-content>
+          <div class="example-content">Radio content</div>
+        </ion-content>
+      </div>
+    </ion-tab>
+
+    <ion-tab tab="favorites">
+      <div id="favorites-page">
+        <app-header title="Favoritos"></app-header>
+        <ion-content>
+          <div class="example-content">Favorites content</div>
+        </ion-content>
+      </div>
+    </ion-tab>
+
+    <ion-tab tab="account">
+      <div id="account-page">
+        <app-header title="Perfil"></app-header>
+        <ion-content>
+          <div class="example-content">Perfil content</div>
+        </ion-content>
+      </div>
+    </ion-tab>
+    
+
+    <ion-tab-bar slot="bottom" color="primary">
+      <ion-tab-button tab="home">
+        <ion-icon name="home"></ion-icon>
+        Inicio
+      </ion-tab-button>
+      <ion-tab-button tab="menu">
+        <ion-icon name="storefront"></ion-icon>
+        Servicios
+      </ion-tab-button>
+      <ion-tab-button tab="favorites">
+        <ion-icon name="heart"></ion-icon>
+        Favoritos
+      </ion-tab-button>
+      <ion-tab-button tab="account">
+        <ion-icon name="person-circle"></ion-icon>
+        Perfil
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-content>
