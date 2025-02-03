@@ -7,6 +7,7 @@ import { CustomInputComponent } from './custom-input/custom-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FabButtonCartComponent } from './fab-button-cart/fab-button-cart.component';
 import { ItemProductComponent } from './item-product/item-product.component';
+import { CardProductComponent } from './card-product/card-product.component';
 
 
 
@@ -16,7 +17,8 @@ import { ItemProductComponent } from './item-product/item-product.component';
     LogoComponent,
     CustomInputComponent,
     FabButtonCartComponent,
-    ItemProductComponent
+    ItemProductComponent,
+    CardProductComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import { ItemProductComponent } from './item-product/item-product.component';
     CustomInputComponent,
     ReactiveFormsModule,
     FabButtonCartComponent,
-    ItemProductComponent
+    ItemProductComponent,
+    CardProductComponent
   ]
 })
 export class ComponentsModule { }
