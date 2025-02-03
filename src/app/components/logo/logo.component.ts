@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-logo',
@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   standalone: false
 })
 export class LogoComponent  implements OnInit {
+
+  @Input() imagen: string = '';
 
   constructor() { }
 
