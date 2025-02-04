@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-card-product',
@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   standalone: false
 })
 export class CardProductComponent  implements OnInit {
+
+  @Input() imagen: string = '';
+  @Input() title: string = '';
 
   constructor() { }
 
