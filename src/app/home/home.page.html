@@ -1,10 +1,21 @@
 <ion-content>
   <ion-tabs>
-    <app-fab-button-cart></app-fab-button-cart>
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="buttonFab">
+      <ion-fab-button routerLink="/cart">
+        <ion-icon name="cart"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
     <ion-tab tab="home">
         <app-header title="Inicio"></app-header>
         <ion-content>
-          <app-item-product title="Pizza de peperoni" description="Pizza de peperoni" [price]=300></app-item-product>
+          <app-item-product
+            *ngFor="let producto of productos"
+            [title]="producto.title"
+            [description]="producto.description"
+            [price]="producto.price"
+            [image]="producto.image">
+          </app-item-product>
         </ion-content>
     </ion-tab>
 
