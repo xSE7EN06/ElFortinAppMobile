@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Producto, ProductService} from '../services/product.service';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   standalone: false
 })
 export class HomePage implements OnInit {
+  productos !: Producto[];
 
    form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -15,9 +17,12 @@ export class HomePage implements OnInit {
     })
   
 
-  constructor() { }
+  constructor(private productService: ProductService) { }
 
   ngOnInit() {
+    this.productService.getProductos().subscribe(productos => {
+      this.productos = productos;
+    });
   }
 
   //cramos una funcion para manejar los errores de login.page.html
@@ -34,5 +39,4 @@ export class HomePage implements OnInit {
     }
     return ''; // Si no hay errores, retorna un string vacío
   }
-
 }
