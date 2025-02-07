@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { ProductService, Producto } from '../services/product.service';
+import { jsPDF } from 'jspdf';
+
 
 @Component({
   selector: 'app-cart',
@@ -66,6 +68,7 @@ export class CartPage implements OnInit {
         {
           text: 'Pagar',
           handler: () => {
+            this.generatePDF(); // Call the generate PDF function before clearing the cart
             this.cart = []; // Clear cart after purchase
             this.presentToast('Compra realizada con éxito.', 'success');
           }
@@ -87,5 +90,20 @@ export class CartPage implements OnInit {
       color
     });
     toast.present();
+  }
+
+  generatePDF() {
+    const doc = new jsPDF();
+
+    doc.text('Comprobante de Compra', 10, 10);
+    let y = 20; // Variable to manage vertical position for lines
+
+    this.cart.forEach((item, index) => {
+      doc.text(`${index + 1}. ${item.title}, Precio: $${item.price.toFixed(2)}`, 10, y);
+      y += 10; // Increment the y position so texts don't overlap
+    });
+
+    doc.text(`Total a pagar: $${this.getTotal().toFixed(2)}`, 10, y + 10);
+    doc.save('comprobante-de-compra.pdf'); // Save the PDF document
   }
 }

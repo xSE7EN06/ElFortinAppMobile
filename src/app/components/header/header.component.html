@@ -7,10 +7,16 @@
         </div>
       </ion-title>
 
-      <div class="logo-container" slot="end">
+      <ion-buttons slot="primary">
+        <ion-button (click)="confirmLogout()">
+          <ion-icon slot="icon-only" ios="log-out-outline" md="log-out-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+     <!--- <div class="logo-container" slot="end">
         <ion-avatar>
           <img src="../../../assets/icon/logop.png" />
         </ion-avatar>
-      </div>
+      </div>-->
     </ion-toolbar>
   </ion-header>
