@@ -9,6 +9,7 @@ import { FabButtonCartComponent } from './fab-button-cart/fab-button-cart.compon
 import { ItemProductComponent } from './item-product/item-product.component';
 import { CardProductComponent } from './card-product/card-product.component';
 import { LayoutComponent } from './layout/layout.component';
+import { ItemCartComponent } from './item-cart/item-cart.component';
 
 
 
@@ -20,7 +21,8 @@ import { LayoutComponent } from './layout/layout.component';
     FabButtonCartComponent,
     ItemProductComponent,
     CardProductComponent,
-    LayoutComponent
+    LayoutComponent,
+    ItemCartComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,8 @@ import { LayoutComponent } from './layout/layout.component';
     FabButtonCartComponent,
     ItemProductComponent,
     CardProductComponent,
-    LayoutComponent
+    LayoutComponent,
+    ItemCartComponent
   ]
 })
 export class ComponentsModule { }

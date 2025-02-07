@@ -2,11 +2,10 @@
     display: flex;
     justify-content: center; // Center horizontally
     align-items: center; // Center vertically
-    height: 100vh; // Full viewport height
-    width: 100vw; // Full viewport width
+    height: 200px; // Full viewport height
     background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary)); // Gradient background
     animation: gradientAnimation 10s ease infinite; // Background animation
-    text-align: center;
+    position: relative;
     overflow: hidden; // Prevent scrollbars
   
     .center-container {
@@ -16,8 +15,8 @@
       animation: fadeIn 1.5s ease-in-out;
   
       .logo {
-        width: 100vw; // Adjust size as needed
-        height: 50vh; // Adjust size as needed
+        width: 160px;
+        height: 160px;
         border-radius: 50%; // Make the logo circular
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); // Soft shadow
         animation: float 3s ease-in-out infinite; // Floating effect

@@ -10,6 +10,8 @@ export class ItemProductComponent  implements OnInit {
   @Input() title !: string;
   @Input() description!: string;
   @Input() price!: number;
+  @Input() quantity!: number;
+
   @Input() image!: string;
 
   constructor() { }

@@ -1,0 +1,17 @@
+<ion-list>
+  <ion-item lines="full" button lines="none">
+    <ion-thumbnail slot="start">
+      <img [src]="image" />
+    </ion-thumbnail>
+    <ion-label>
+      <strong><h2>{{title}}</h2></strong>
+      <strong><p>$ {{totalPrice}}</p></strong>
+      <strong><p>$ {{quantity}}</p></strong>
+
+    </ion-label>
+
+    <ion-buttons slot="end">
+      <ion-button>Eliminar</ion-button>
+    </ion-buttons>
+  </ion-item>
+</ion-list>

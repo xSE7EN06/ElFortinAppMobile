@@ -1,0 +1,26 @@
+ion-thumbnail {
+    --size: 95px; /* Ajusta el tamaño de la imagen */
+    --border-radius: 14px;
+}
+
+ion-item {
+    --border-color: #cccccc; /* Ajusta el color del borde si es necesario */
+    --padding-start: 10px;
+    --inner-padding-end: 10px;
+  }
+  
+  ion-label h2 {
+    margin-bottom: 2px;
+    font-weight: bold;
+  }
+  
+  ion-label p {
+    font-size: 0.8rem;
+    color: #666666;
+  }
+  
+  ion-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+  
