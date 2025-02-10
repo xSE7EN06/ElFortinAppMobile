@@ -1,3 +1,21 @@
 .buttonFab{
     margin-bottom: 58px;
 }
+
+ion-card {
+    margin: 20px;
+  }
+  
+  ion-input {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+  
+  ion-label {
+    --color: var(--ion-color-primary, blue);
+  }
+  
+  ion-note {
+    color: var(--ion-color-medium);
+    text-align: center;
+  }
