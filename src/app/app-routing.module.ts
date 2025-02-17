@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'splash',
     loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
   },
+  {
+    path: 'product-item',
+    loadChildren: () => import('./product-item/product-item.module').then( m => m.ProductItemPageModule)
+  },
 
 ];
 

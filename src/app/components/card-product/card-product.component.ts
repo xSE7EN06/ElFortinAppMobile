@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-card-product',
@@ -11,8 +12,12 @@ export class CardProductComponent  implements OnInit {
   @Input() imagen: string = '';
   @Input() title: string = '';
 
-  constructor() { }
+  constructor(private navController: NavController) { }
 
   ngOnInit() {}
+
+  verMas(){
+    this.navController.navigateForward("/product-item");
+  }
 
 }
