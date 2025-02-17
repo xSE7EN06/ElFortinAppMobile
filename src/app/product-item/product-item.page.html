@@ -1,0 +1,30 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Producto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item lines="full" button lines="none">
+    <ion-thumbnail slot="start">
+      <img src="../../assets/icon/logop.png" />
+    </ion-thumbnail>
+    <ion-label>
+      <strong><h2>Ejempolo</h2></strong>
+      <p>Esto se repetira</p>
+      <strong><p>$ 89.00</p></strong>
+    </ion-label>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+</ion-content>
