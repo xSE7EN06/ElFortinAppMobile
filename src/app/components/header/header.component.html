@@ -7,7 +7,7 @@
         </div>
       </ion-title>
 
-      <ion-buttons slot="primary">
+      <ion-buttons slot="primary" *ngIf="showLogout">
         <ion-button (click)="confirmLogout()">
           <ion-icon slot="icon-only" ios="log-out-outline" md="log-out-outline"></ion-icon>
         </ion-button>

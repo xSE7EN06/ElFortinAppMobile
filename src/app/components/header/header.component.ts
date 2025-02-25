@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent  implements OnInit {
 
-  @Input() title: string = '';
+  @Input() title !: string;
+  @Input() showLogout: boolean = true; // Controla la visibilidad del botón
 
   constructor(private alertController: AlertController,
     private toastController: ToastController, private route: Router) { }
