@@ -7,7 +7,7 @@
     </ion-fab>
 
     <ion-tab tab="home">
-        <app-header title="Inicio"></app-header>
+        <app-header title="Inicio" [mostrar]="false"></app-header>
         <ion-content>
           <app-item-product
             *ngFor="let producto of productos"
@@ -20,7 +20,7 @@
     </ion-tab>
 
     <ion-tab tab="menu">
-        <app-header title="Servicios"></app-header>
+        <app-header title="Servicios" [mostrar]="false"></app-header>
         <ion-content>
           <app-layout>
           <app-card-product imagen="../../assets/icon/panaderia.png" title="Panaderia"></app-card-product>
@@ -31,14 +31,17 @@
     </ion-tab>
 
     <ion-tab tab="favorites">
-        <app-header title="Favoritos"></app-header>
+        <app-header title="Favoritos" [mostrar]="false"></app-header>
         <ion-content>
-          
+          <div class="empty-favorites">
+            <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
+            <p>No hay nada asignado a favoritos, por favor agregue elementos.</p>
+          </div>
         </ion-content>
     </ion-tab>
 
     <ion-tab tab="account">
-        <app-header title="Perfil"></app-header>
+        <app-header title="Perfil" [mostrar]="false"></app-header>
         <ion-content>
           <form [formGroup]="form">
             <app-logo imagen="https://ionicframework.com/docs/img/demos/avatar.svg"></app-logo>
