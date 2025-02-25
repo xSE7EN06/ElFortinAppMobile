@@ -14,6 +14,7 @@ import { ComponentsModule } from '../components/components.module';
     FormsModule,
     IonicModule,
     SplashPageRoutingModule,
+    ComponentsModule
     ],
   declarations: [SplashPage]
 })
