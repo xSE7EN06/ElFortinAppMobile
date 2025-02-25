@@ -4,14 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { CartPage } from './cart.page';
+import { ComponentsModule } from "../components/components.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild([{ path: '', component: CartPage }])
-  ],
+    RouterModule.forChild([{ path: '', component: CartPage }]),
+    ComponentsModule
+],
   declarations: [CartPage]
 })
 export class CartPageModule {}
