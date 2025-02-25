@@ -13,6 +13,7 @@ export class HeaderComponent  implements OnInit {
 
   @Input() title !: string;
   @Input() showLogout: boolean = true; // Controla la visibilidad del botón
+  @Input() mostrar: boolean = true;
 
   constructor(private alertController: AlertController,
     private toastController: ToastController, private route: Router) { }
