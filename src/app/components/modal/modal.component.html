@@ -1,0 +1,32 @@
+<app-header title="Hola" [showLogout]="false" [mostrar]="false"></app-header>
+
+<ion-content>
+  <ion-searchbar placeholder="Search"></ion-searchbar>
+  <ion-list>
+    <ion-item lines="full" button lines="none">
+      <ion-thumbnail slot="start">
+        <img src="../../../assets/icon/panaderia.png" />
+      </ion-thumbnail>
+      <ion-label>
+        <strong><h2>Hola</h2></strong>
+        <p>Nose</p>
+        <strong><p>$ 55</p></strong>
+      </ion-label>
+  
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+        </ion-button>
+        <ion-button>
+          <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="buttonFab">
+    <ion-fab-button (click)="openCart($event)">
+      <ion-icon name="cart"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
