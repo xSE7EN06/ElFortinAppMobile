@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Producto, ProductService} from '../services/product.service';
+import { ModalComponent } from '../components/modal/modal.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +12,7 @@ import { Producto, ProductService} from '../services/product.service';
 })
 export class HomePage implements OnInit {
   productos !: Producto[];
+  isModalOpen = false; // Variable para controlar el estado del modal
 
    form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -17,7 +20,7 @@ export class HomePage implements OnInit {
     })
   
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private modalCtrl: ModalController) { }
 
   ngOnInit() {
     this.productService.getProductos().subscribe(productos => {
@@ -38,5 +41,13 @@ export class HomePage implements OnInit {
       return 'Ingresa un correo electrónico válido.';
     }
     return ''; // Si no hay errores, retorna un string vacío
+  }
+
+  async openModal() {
+    const modal = await this.modalCtrl.create({
+      component: ModalComponent,
+    });
+
+    return await modal.present();
   }
 }

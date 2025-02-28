@@ -14,6 +14,7 @@ export class HeaderComponent  implements OnInit {
   @Input() title !: string;
   @Input() showLogout: boolean = true; // Controla la visibilidad del botón
   @Input() mostrar: boolean = true;
+  @Input() mostrarBtnModal: boolean = true;
 
   constructor(private alertController: AlertController,
     private toastController: ToastController, private route: Router) { }
@@ -56,6 +57,10 @@ export class HeaderComponent  implements OnInit {
       color
     });
     toast.present();
+  }
+
+  closeModal(event: any) {
+    event.target.closest('ion-modal').dismiss();
   }
 
 }

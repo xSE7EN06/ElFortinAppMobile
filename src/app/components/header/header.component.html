@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" mode="md">
     <ion-toolbar color="primary">
       <ion-buttons slot="start" *ngIf="mostrar">
         <ion-back-button default-href="#"></ion-back-button>
@@ -14,6 +14,12 @@
       <ion-buttons slot="primary" *ngIf="showLogout">
         <ion-button (click)="confirmLogout()">
           <ion-icon slot="icon-only" ios="log-out-outline" md="log-out-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end" *ngIf="mostrarBtnModal">
+        <ion-button (click)="closeModal($event)">
+          <ion-icon slot="icon-only" name="close-circle-outline" size="large"></ion-icon>
         </ion-button>
       </ion-buttons>
 

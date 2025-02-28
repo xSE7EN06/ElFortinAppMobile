@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content fullscreen="true">
   <ion-tabs>
     <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="buttonFab">
       <ion-fab-button routerLink="/cart">
@@ -7,7 +7,7 @@
     </ion-fab>
 
     <ion-tab tab="home">
-        <app-header title="Inicio" [mostrar]="false"></app-header>
+        <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <app-item-product
             *ngFor="let producto of productos"
@@ -20,18 +20,36 @@
     </ion-tab>
 
     <ion-tab tab="menu">
-        <app-header title="Servicios" [mostrar]="false"></app-header>
+        <app-header title="Servicios" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <app-layout>
-          <app-card-product imagen="../../assets/icon/panaderia.png" title="Panaderia"></app-card-product>
-          <app-card-product imagen="../../assets/icon/bebida.png" title="Bebidas"></app-card-product>
-          <app-card-product imagen="../../assets/icon/pizza.png" title="Restaurante"></app-card-product>
+            <ion-card>
+              <img alt="Silhouette of mountains" src="../../assets/icon/pizza.png"/>
+              <ion-card-header>
+                <ion-card-title>Restaurante</ion-card-title>
+              </ion-card-header>
+              <ion-button fill="clear" (click)="openModal()">Ver más</ion-button>
+            </ion-card>
+            <ion-card>
+              <img alt="Silhouette of mountains" src="../../assets/icon/bebida.png"/>
+              <ion-card-header>
+                <ion-card-title>Bebidas</ion-card-title>
+              </ion-card-header>
+              <ion-button fill="clear" (click)="openModal()">Ver más</ion-button>
+            </ion-card>
+            <ion-card>
+              <img alt="Silhouette of mountains" src="../../assets/icon/panaderia.png"/>
+              <ion-card-header>
+                <ion-card-title>Panaderia</ion-card-title>
+              </ion-card-header>
+              <ion-button fill="clear" (click)="openModal()">Ver más</ion-button>
+            </ion-card>
           </app-layout>
         </ion-content>
     </ion-tab>
 
     <ion-tab tab="favorites">
-        <app-header title="Favoritos" [mostrar]="false"></app-header>
+        <app-header title="Favoritos" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <div class="empty-favorites">
             <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
@@ -41,7 +59,7 @@
     </ion-tab>
 
     <ion-tab tab="account">
-        <app-header title="Perfil" [mostrar]="false"></app-header>
+        <app-header title="Perfil" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <form [formGroup]="form">
             <app-logo imagen="https://ionicframework.com/docs/img/demos/avatar.svg"></app-logo>
