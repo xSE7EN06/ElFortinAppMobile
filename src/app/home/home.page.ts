@@ -14,13 +14,24 @@ export class HomePage implements OnInit {
   productos !: Producto[];
   isModalOpen = false; // Variable para controlar el estado del modal
 
+  images: string[] = [
+    '../../assets/images/promocion3.jpg',
+    '../../assets/images/promocion4.jpeg',
+    '../../assets/images/promocion5.jpeg'
+  ];
+  currentIndex = 0;
+
    form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
   
 
-  constructor(private productService: ProductService, private modalCtrl: ModalController) { }
+  constructor(private productService: ProductService, private modalCtrl: ModalController) { 
+    setInterval(() => {
+      this.nextSlide();
+    }, 3000); // Cambia de imagen cada 3 segundos
+  }
 
   ngOnInit() {
     this.productService.getProductos().subscribe(productos => {
@@ -49,5 +60,9 @@ export class HomePage implements OnInit {
     });
 
     return await modal.present();
+  }
+
+  nextSlide() {
+    this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
 }
