@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { UsuarioService } from '../services/user.service';
 
 
 @Component({
@@ -17,7 +18,9 @@ export class LoginPage implements OnInit {
     password: new FormControl('', [Validators.required])
   })
 
-  constructor(private loadingCtrl: LoadingController, private route: Router) { }
+  constructor(private loadingCtrl: LoadingController, private route: Router,  private alertCtrl: AlertController,
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit() {
   }
@@ -38,15 +41,49 @@ export class LoginPage implements OnInit {
   }
 
   async login(){
+    if (this.form.invalid) {
+      return;
+    }
+
     const loading = await this.loadingCtrl.create({
-      message: "Iniciando sesión",
-      duration: 2000,
+      message: "Iniciando sesión...",
     });
 
     await loading.present(); // Espera a que se muestre el loading
 
-    await loading.onDidDismiss(); // Espera a que termine el loading antes de navegar
-  
-    this.route.navigate(['/home']); // Ahora se ejecuta la navegación
+    
+    const { email, password } = this.form.value as { email: string; password: string };
+    console.log('Datos enviados:', { email, password });
+
+    this.usuarioService.login(email, password).subscribe({
+      next: async (response) => {
+        console.log('Login exitoso:', response);
+        await loading.dismiss();
+        // Mostrar mensaje de bienvenida
+        const welcomeAlert = await this.alertCtrl.create({
+          header: '¡Bienvenido!',
+          message: `!Has iniciado sesión correctamente.`,
+          buttons: [{
+            text: 'OK',
+            handler: () => {
+              this.route.navigate(['/home']); // Redirigir a Home después del mensaje
+            }
+          }]
+        });
+
+        await welcomeAlert.present();
+      },
+      error: async (error) => {
+        console.error('Error en login:', error);
+        await loading.dismiss();
+
+        const alert = await this.alertCtrl.create({
+          header: 'Error',
+          message: 'Usuario o contraseña incorrectos.',
+          buttons: ['OK']
+        });
+        await alert.present();
+      }
+    });
   }
 }

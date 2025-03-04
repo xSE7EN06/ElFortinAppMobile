@@ -9,6 +9,24 @@
     <ion-tab tab="home">
         <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
+         <ion-item lines="none">
+          <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"></ion-searchbar>  
+         </ion-item>
+          <ion-card class="cardPromotion">
+            <div class="carousel">
+              <div class="slides" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+                <div *ngFor="let image of images" class="slide">
+                  <img [src]="image" alt="Slide">
+                </div>
+              </div>
+            </div>
+          </ion-card>
+
+          <ion-item lines="none">
+            <ion-label>
+              <h3><strong>Productos</strong></h3>
+            </ion-label>
+          </ion-item>
           <app-item-product
             *ngFor="let producto of productos"
             [title]="producto.title"

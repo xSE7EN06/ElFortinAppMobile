@@ -1,12 +1,12 @@
-<app-header [showLogout]="false" title="Iniciar Sesión" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
+ <app-header [showLogout]="false" title="Iniciar Sesión" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
 <ion-content>
     <app-logo imagen="../../../assets/icon/logop.png"></app-logo>
 
-    <form [formGroup]="form">
+    <form [formGroup]="form" (ngSubmit)="login()">
 
         <app-custom-input
         autocomplete="email"
-        icon="mail-outline"
+        icon="mail"
         [control]="form.controls.email"
         type="email"
         label="Correo"
@@ -14,14 +14,14 @@
         ></app-custom-input>
 
         <app-custom-input
-        icon="lock-closed-outline"
+        icon="eye"
         [control]="form.controls.password"
         type="password"
         label="Contraseña"
         [errorText]="getErrorMessage('password')"
         ></app-custom-input>
 
-        <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid" (click)="login()">
+        <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
             Iniciar Sesión
             <ion-icon name="log-in-outline" slot="end"></ion-icon>
         </ion-button>

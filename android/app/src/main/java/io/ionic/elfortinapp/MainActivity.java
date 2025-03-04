@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.ionic.elfortinapp;
 
 import com.getcapacitor.BridgeActivity;
 
