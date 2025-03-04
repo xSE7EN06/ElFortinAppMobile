@@ -9,13 +9,16 @@
     <ion-tab tab="home">
         <app-header title="Inicio" [mostrar]="false"></app-header>
         <ion-content>
-          <app-item-product
-            *ngFor="let producto of productos"
-            [title]="producto.title"
-            [description]="producto.description"
-            [price]="producto.price"
-            [image]="producto.image">
-          </app-item-product>
+            <app-item-product 
+    *ngFor="let producto of productos" 
+    [title]="producto.title"
+    [description]="producto.description"
+    [price]="producto.price"
+    [image]="producto.image"
+    [favorite]="producto.favorite"
+    [id]="producto.id"
+    (favoriteChanged)="toggleFavorite($event)">
+  </app-item-product>
         </ion-content>
     </ion-tab>
 
@@ -31,14 +34,32 @@
     </ion-tab>
 
     <ion-tab tab="favorites">
-        <app-header title="Favoritos" [mostrar]="false"></app-header>
-        <ion-content>
+      <app-header title="Favoritos" [mostrar]="false"></app-header>
+      <ion-content>
+        <ion-list *ngIf="favoritos.length > 0">
+          <app-item-product 
+            *ngFor="let producto of favoritos"  
+            [title]="producto.title"
+            [description]="producto.description"
+            [price]="producto.price"
+            [image]="producto.image"
+            [favorite]="producto.favorite"
+            [id]="producto.id"
+            (favoriteChanged)="toggleFavorite($event)">
+          </app-item-product>
+        </ion-list>
+        
+        <!-- Si no hay productos favoritos -->
+        <ion-list *ngIf="favoritos.length === 0">
           <div class="empty-favorites">
             <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
-            <p>No hay nada asignado a favoritos, por favor agregue elementos.</p>
+            <p>No hay productos en favoritos. Agrega algunos productos.</p>
           </div>
-        </ion-content>
+        </ion-list>
+        
+      </ion-content>
     </ion-tab>
+    
 
     <ion-tab tab="account">
         <app-header title="Perfil" [mostrar]="false"></app-header>
