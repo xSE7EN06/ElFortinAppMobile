@@ -2,7 +2,7 @@
 <ion-content>
     <app-logo imagen="../../../assets/icon/logop.png"></app-logo>
 
-    <form [formGroup]="form">
+    <form [formGroup]="form" (ngSubmit)="login()">
 
         <app-custom-input
         autocomplete="email"
@@ -21,7 +21,7 @@
         [errorText]="getErrorMessage('password')"
         ></app-custom-input>
 
-        <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid" (click)="login()">
+        <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
             Iniciar Sesión
             <ion-icon name="log-in-outline" slot="end"></ion-icon>
         </ion-button>
