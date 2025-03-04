@@ -20,4 +20,11 @@ export class CustomInputComponent  implements OnInit {
 
   ngOnInit() {}
 
+  getErrorMessage(): string {
+    if (!this.control) return '';
+    if (this.control.hasError('required')) return 'Este campo es obligatorio.';
+    if (this.control.hasError('email')) return 'Ingresa un correo electrónico válido.';
+    return '';
+  }
+
 }

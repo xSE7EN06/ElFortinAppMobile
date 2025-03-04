@@ -7,3 +7,4 @@ export interface Producto{
     price: number;
     category_id: number;
 }
+
