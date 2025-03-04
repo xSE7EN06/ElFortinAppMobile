@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Usuario } from "../interfaces/usuarios.interface";
-import { environments } from '../../environments/environments';
+import { environment } from '../../environments/envairoment';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
 })
 export class UsuarioService {
 
-    private baseUrl: string = environments.baseUrl;
+    private baseUrl: string = environment.baseUrl;
 
     constructor(private http: HttpClient){}
 
