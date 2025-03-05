@@ -9,16 +9,7 @@
     <ion-tab tab="home">
         <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
-            <app-item-product 
-    *ngFor="let producto of productos" 
-    [title]="producto.title"
-    [description]="producto.description"
-    [price]="producto.price"
-    [image]="producto.image"
-    [favorite]="producto.favorite"
-    [id]="producto.id"
-    (favoriteChanged)="toggleFavorite($event)">
-  </app-item-product>
+            
          <ion-item lines="none">
           <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"></ion-searchbar>  
          </ion-item>
@@ -37,13 +28,16 @@
               <h3><strong>Productos</strong></h3>
             </ion-label>
           </ion-item>
-          <app-item-product
-            *ngFor="let producto of productos"
-            [title]="producto.title"
-            [description]="producto.description"
-            [price]="producto.price"
-            [image]="producto.image">
-          </app-item-product>
+          <app-item-product 
+    *ngFor="let producto of productos" 
+    [title]="producto.title"
+    [description]="producto.description"
+    [price]="producto.price"
+    [image]="producto.image"
+    [favorite]="producto.favorite"
+    [id]="producto.id"
+    (favoriteChanged)="toggleFavorite($event)">
+  </app-item-product>
         </ion-content>
     </ion-tab>
 
