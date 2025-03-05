@@ -20,6 +20,7 @@ export class HomePage implements OnInit {
     '../../assets/images/promocion5.jpeg'
   ];
   currentIndex = 0;
+  favoritos !: Producto[];
 
    form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -37,6 +38,12 @@ export class HomePage implements OnInit {
     this.productService.getProductos().subscribe(productos => {
       this.productos = productos;
     });
+    this.productService.getFavoriteProducts().subscribe(favoritos => {
+      this.favoritos = favoritos;
+
+      console.log(this.favoritos);
+    })
+
   }
 
   //cramos una funcion para manejar los errores de login.page.html
@@ -65,4 +72,27 @@ export class HomePage implements OnInit {
   nextSlide() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
+
+  toggleFavorite(productId: number) {
+    // Llamar al servicio para alternar el estado de favorito
+    this.productService.toggleFavorite(productId).subscribe(() => {
+      // Actualizar la lista de productos y filtrar los productos favoritos
+      this.productService.getProductos().subscribe(productos => {
+        this.productos = productos;
+        // Filtrar los productos favoritos después de la actualización
+        this.favoritos = productos.filter(producto => producto.favorite);
+      });
+    });
+  this.removeNonFavoriteProducts();
+  }
+  
+  
+  removeNonFavoriteProducts() {
+    // Filtrar los productos para eliminar los que no son favoritos
+    this.favoritos = this.productos.filter(producto => producto.favorite);
+  }
+  
+  
+  
+  
 }
