@@ -29,15 +29,9 @@
             </ion-label>
           </ion-item>
           <app-item-product 
-    *ngFor="let producto of productos" 
-    [title]="producto.title"
-    [description]="producto.description"
-    [price]="producto.price"
-    [image]="producto.image"
-    [favorite]="producto.favorite"
-    [id]="producto.id"
-    (favoriteChanged)="toggleFavorite($event)">
-  </app-item-product>
+           *ngFor="let producto of productos" 
+            [producto]="producto">
+          </app-item-product>
         </ion-content>
     </ion-tab>
 
@@ -71,30 +65,22 @@
     </ion-tab>
 
     <ion-tab tab="favorites">
-      <app-header title="Favoritos" [mostrar]="false"></app-header>
-      <ion-content>
-        <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
-          <app-item-product 
-            *ngFor="let producto of favoritos"  
-            [title]="producto.title"
-            [description]="producto.description"
-            [price]="producto.price"
-            [image]="producto.image"
-            [favorite]="producto.favorite"
-            [id]="producto.id"
-            (favoriteChanged)="toggleFavorite($event)">
-          </app-item-product>
-        </ion-list>
-    
-        <!-- Template alternativo cuando no hay favoritos -->
-        <ng-template #noFavoritos>
-          <div class="empty-favorites">
-            <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
-            <p>No hay productos en favoritos. Agrega algunos productos.</p>
-          </div>
-        </ng-template>
-    
-      </ion-content>
+      <app-header title="Favoritos" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
+  <ion-content>
+    <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
+      <app-item-product 
+        *ngFor="let producto of favoritos" 
+        [producto]="producto">
+      </app-item-product>
+    </ion-list>
+
+    <ng-template #noFavoritos>
+      <div class="empty-favorites">
+        <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
+        <p>No hay productos en favoritos. Agrega algunos productos.</p>
+      </div>
+    </ng-template>
+  </ion-content>
     </ion-tab>
     
     

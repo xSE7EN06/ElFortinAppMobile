@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Producto, ProductService} from '../services/product.service';
+import { ProductService} from '../services/product.service';
 import { ModalComponent } from '../components/modal/modal.component';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
+import { Producto } from '../interfaces/productos.interface';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +12,11 @@ import { ModalController } from '@ionic/angular';
   standalone: false
 })
 export class HomePage implements OnInit {
-  productos !: Producto[];
+  productos: Producto[] = [];
+  favoritos: Producto[] = [];
+  carrito: Producto[] = [];
   isModalOpen = false; // Variable para controlar el estado del modal
+  
 
   images: string[] = [
     '../../assets/images/promocion3.jpg',
@@ -20,7 +24,6 @@ export class HomePage implements OnInit {
     '../../assets/images/promocion5.jpeg'
   ];
   currentIndex = 0;
-  favoritos !: Producto[];
 
    form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -28,22 +31,15 @@ export class HomePage implements OnInit {
     })
   
 
-  constructor(private productService: ProductService, private modalCtrl: ModalController) { 
+  constructor(private productService: ProductService, private modalCtrl: ModalController, private toastController: ToastController) { 
     setInterval(() => {
       this.nextSlide();
     }, 3000); // Cambia de imagen cada 3 segundos
   }
 
   ngOnInit() {
-    this.productService.getProductos().subscribe(productos => {
-      this.productos = productos;
-    });
-    this.productService.getFavoriteProducts().subscribe(favoritos => {
-      this.favoritos = favoritos;
-
-      console.log(this.favoritos);
-    })
-
+    this.loadProductos();
+    //this.loadFavorites();
   }
 
   //cramos una funcion para manejar los errores de login.page.html
@@ -73,26 +69,17 @@ export class HomePage implements OnInit {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
 
-  toggleFavorite(productId: number) {
-    // Llamar al servicio para alternar el estado de favorito
-    this.productService.toggleFavorite(productId).subscribe(() => {
-      // Actualizar la lista de productos y filtrar los productos favoritos
-      this.productService.getProductos().subscribe(productos => {
-        this.productos = productos;
-        // Filtrar los productos favoritos después de la actualización
-        this.favoritos = productos.filter(producto => producto.favorite);
-      });
+  loadProductos(): void {
+    this.productService.getProducts().subscribe((productos) => {
+      this.productos = productos;
     });
-  this.removeNonFavoriteProducts();
+
+    this.productService.getFavorites().subscribe((favoritos) => {
+      this.favoritos = favoritos;
+    });
+
+    this.productService.getProductsCart().subscribe((carrito) => {
+      this.carrito = carrito;
+    });
   }
-  
-  
-  removeNonFavoriteProducts() {
-    // Filtrar los productos para eliminar los que no son favoritos
-    this.favoritos = this.productos.filter(producto => producto.favorite);
-  }
-  
-  
-  
-  
 }

@@ -3,8 +3,8 @@ export interface Producto{
     restaurante_id: number;
     name: string;
     description: string;
-    img_url: string;
+    image_url: string;
     price: number;
-    category_id: number;
+    category_name: string;
 }
 
