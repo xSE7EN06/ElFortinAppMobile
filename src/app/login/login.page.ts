@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { UsuarioService } from '../services/user.service';
 
 
@@ -19,7 +19,7 @@ export class LoginPage implements OnInit {
   })
 
   constructor(private loadingCtrl: LoadingController, private route: Router,  private alertCtrl: AlertController,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService, private toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -57,21 +57,16 @@ export class LoginPage implements OnInit {
 
     this.usuarioService.login(email, password).subscribe({
       next: async (response) => {
-        console.log('Login exitoso:', response);
         await loading.dismiss();
         // Mostrar mensaje de bienvenida
-        const welcomeAlert = await this.alertCtrl.create({
-          header: '¡Bienvenido!',
-          message: `!Has iniciado sesión correctamente.`,
-          buttons: [{
-            text: 'OK',
-            handler: () => {
-              this.route.navigate(['/home']); // Redirigir a Home después del mensaje
-            }
-          }]
-        });
-
-        await welcomeAlert.present();
+        const toast = await this.toastController.create({
+        message: '¡Bienvenido!', // Mensaje fijo o puedes usar response.data
+        duration: 1000, // 3 segundos
+        position: 'middle',
+        color: 'success',
+      });
+        await toast.present();
+        this.route.navigate(['/home']); // Redirigir a Home después del mensaje
       },
       error: async (error) => {
         console.error('Error en login:', error);
