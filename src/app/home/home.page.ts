@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Producto, ProductService} from '../services/product.service';
+import { ProductService} from '../services/product.service';
 import { ModalComponent } from '../components/modal/modal.component';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
+import { Producto } from '../interfaces/productos.interface';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { UsuarioService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +14,15 @@ import { ModalController } from '@ionic/angular';
   standalone: false
 })
 export class HomePage implements OnInit {
-  productos !: Producto[];
+  productos: Producto[] = [];
+  favoritos: Producto[] = [];
+  carrito: Producto[] = [];
   isModalOpen = false; // Variable para controlar el estado del modal
+  profileImage: string = "../../assets/icon/avtar.png";
+
+  //variabel para almacenar el id del token
+  userId: number | null = null;
+  
 
   images: string[] = [
     '../../assets/images/promocion3.jpg',
@@ -34,9 +44,8 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.productService.getProductos().subscribe(productos => {
-      this.productos = productos;
-    });
+    this.loadProductos();
+    //this.loadFavorites();
   }
 
   //cramos una funcion para manejar los errores de login.page.html
@@ -64,5 +73,40 @@ export class HomePage implements OnInit {
 
   nextSlide() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
+  }
+
+  loadProductos(): void {
+    this.productService.getProducts().subscribe((productos) => {
+      this.productos = productos;
+    });
+
+    this.productService.getFavorites().subscribe((favoritos) => {
+      this.favoritos = favoritos;
+    });
+
+    this.productService.getProductsCart().subscribe((carrito) => {
+      this.carrito = carrito;
+    });
+  }
+
+
+  async takePhoto(){
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Prompt,
+      });
+  
+      console.log('Base64 Image:', image.base64String); // 👀 Verifica la salida en la consola
+  
+      if (image.base64String) {
+        this.profileImage = `data:image/jpeg;base64,${image.base64String}`;
+      }
+    } catch (error) {
+      console.error('Error al tomar la foto:', error);
+      alert('No se pudo acceder a la cámara o la acción fue cancelada.');
+    }
   }
 }

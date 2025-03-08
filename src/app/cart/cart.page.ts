@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
-import { ProductService, Producto } from '../services/product.service';
+import { ProductService } from '../services/product.service';
 import { jsPDF } from 'jspdf';
+import { Producto } from '../interfaces/productos.interface';
 
 
 @Component({
@@ -23,8 +24,8 @@ export class CartPage implements OnInit {
     this.loadCart();
   }
 
-  loadCart() {
-    this.productService.getProductos().subscribe((productos) => {
+  loadCart(): void{
+    this.productService.getProductsCart().subscribe((productos) => {
       this.cart = productos; // Load products into cart
     });
   }
@@ -32,7 +33,7 @@ export class CartPage implements OnInit {
   async removeFromCart(item: Producto) {
     const alert = await this.alertController.create({
       header: 'Eliminar producto',
-      message: `¿Estás seguro de que deseas eliminar ${item.title} del carrito?`,
+      message: `¿Estás seguro de que deseas eliminar ${item.name} del carrito?`,
       buttons: [
         {
           text: 'Cancelar',
@@ -41,8 +42,7 @@ export class CartPage implements OnInit {
         {
           text: 'Eliminar',
           handler: () => {
-            this.cart = this.cart.filter(cartItem => cartItem.id !== item.id);
-            this.presentToast('Producto eliminado del carrito.');
+            this.productService.toggleCart(item);
           }
         }
       ]
@@ -99,7 +99,7 @@ export class CartPage implements OnInit {
     let y = 20; // Variable to manage vertical position for lines
 
     this.cart.forEach((item, index) => {
-      doc.text(`${index + 1}. ${item.title}, Precio: $${item.price.toFixed(2)}`, 10, y);
+      doc.text(`${index + 1}. ${item.name}, Precio: $${item.price.toFixed(2)}`, 10, y);
       y += 10; // Increment the y position so texts don't overlap
     });
 

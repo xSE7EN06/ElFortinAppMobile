@@ -9,6 +9,7 @@
     <ion-tab tab="home">
         <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
+            
          <ion-item lines="none">
           <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"></ion-searchbar>  
          </ion-item>
@@ -27,12 +28,9 @@
               <h3><strong>Productos</strong></h3>
             </ion-label>
           </ion-item>
-          <app-item-product
-            *ngFor="let producto of productos"
-            [title]="producto.title"
-            [description]="producto.description"
-            [price]="producto.price"
-            [image]="producto.image">
+          <app-item-product 
+           *ngFor="let producto of productos" 
+            [producto]="producto">
           </app-item-product>
         </ion-content>
     </ion-tab>
@@ -67,21 +65,40 @@
     </ion-tab>
 
     <ion-tab tab="favorites">
-        <app-header title="Favoritos" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
-        <ion-content>
-          <div class="empty-favorites">
-            <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
-            <p>No hay nada asignado a favoritos, por favor agregue elementos.</p>
-          </div>
-        </ion-content>
+      <app-header title="Favoritos" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
+  <ion-content>
+    <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
+      <app-item-product 
+        *ngFor="let producto of favoritos" 
+        [producto]="producto">
+      </app-item-product>
+    </ion-list>
+
+    <ng-template #noFavoritos>
+      <div class="empty-favorites">
+        <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
+        <p>No hay productos en favoritos. Agrega algunos productos.</p>
+      </div>
+    </ng-template>
+  </ion-content>
     </ion-tab>
+    
+    
 
     <ion-tab tab="account">
         <app-header title="Perfil" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <form [formGroup]="form">
-            <app-logo imagen="https://ionicframework.com/docs/img/demos/avatar.svg"></app-logo>
-
+            <div class="contenidoImagen">
+              <ion-avatar class="profile-avatar">
+                <img alt="Silhouette of a person's head" [src]="profileImage" />
+                <ion-fab  class="fab-custom-position" vertical="bottom" horizontal="end">
+                  <ion-fab-button color="success" (click)="takePhoto()">
+                    <ion-icon name="camera-outline" color="dark"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>  
+              </ion-avatar>
+            </div>
             <ion-card>
               <ion-card-header>
                 <ion-card-title style="text-align: center;">
