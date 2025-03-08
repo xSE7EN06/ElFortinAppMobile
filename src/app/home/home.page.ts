@@ -4,6 +4,8 @@ import { ProductService} from '../services/product.service';
 import { ModalComponent } from '../components/modal/modal.component';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Producto } from '../interfaces/productos.interface';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { UsuarioService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +18,10 @@ export class HomePage implements OnInit {
   favoritos: Producto[] = [];
   carrito: Producto[] = [];
   isModalOpen = false; // Variable para controlar el estado del modal
+  profileImage: string = "../../assets/icon/avtar.png";
+
+  //variabel para almacenar el id del token
+  userId: number | null = null;
   
 
   images: string[] = [
@@ -31,7 +37,7 @@ export class HomePage implements OnInit {
     })
   
 
-  constructor(private productService: ProductService, private modalCtrl: ModalController, private toastController: ToastController) { 
+  constructor(private productService: ProductService, private modalCtrl: ModalController) { 
     setInterval(() => {
       this.nextSlide();
     }, 3000); // Cambia de imagen cada 3 segundos
@@ -81,5 +87,26 @@ export class HomePage implements OnInit {
     this.productService.getProductsCart().subscribe((carrito) => {
       this.carrito = carrito;
     });
+  }
+
+
+  async takePhoto(){
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Prompt,
+      });
+  
+      console.log('Base64 Image:', image.base64String); // 👀 Verifica la salida en la consola
+  
+      if (image.base64String) {
+        this.profileImage = `data:image/jpeg;base64,${image.base64String}`;
+      }
+    } catch (error) {
+      console.error('Error al tomar la foto:', error);
+      alert('No se pudo acceder a la cámara o la acción fue cancelada.');
+    }
   }
 }
