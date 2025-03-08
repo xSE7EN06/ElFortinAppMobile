@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController, Platform, ToastController } from '@ionic/angular';
 import { UsuarioService } from '../services/user.service';
+import { App } from '@capacitor/app';
+import { HeaderComponent } from '../components/header/header.component';
 
 
 @Component({
@@ -13,14 +15,28 @@ import { UsuarioService } from '../services/user.service';
 })
 export class LoginPage implements OnInit {
 
+  @ViewChild(HeaderComponent) headerComponent: HeaderComponent | undefined;
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   })
 
   constructor(private loadingCtrl: LoadingController, private route: Router,  private alertCtrl: AlertController,
-    private usuarioService: UsuarioService, private toastController: ToastController
-  ) { }
+    private usuarioService: UsuarioService, private toastController: ToastController, private plataform: Platform,
+    private navCtrl: NavController, private router: Router
+  ) {
+    this.plataform.backButton.subscribeWithPriority(10, ()=> {
+      const currentUrl = this.router.url;
+      if(currentUrl === '/login' || currentUrl === "/splash"){
+        App.exitApp();
+      }else if(currentUrl === '/home'){
+        if(this.headerComponent)
+          this.headerComponent.confirmLogout();
+      }else{
+        this.navCtrl.back();
+      }
+    });
+  }
 
   ngOnInit() {
   }
@@ -58,7 +74,11 @@ export class LoginPage implements OnInit {
     this.usuarioService.login(email, password).subscribe({
       next: async (response) => {
         await loading.dismiss();
-        // Mostrar mensaje de bienvenida
+        
+        if(response.token){
+          localStorage.setItem('token', response.token);
+        }
+
         const toast = await this.toastController.create({
         message: '¡Bienvenido!', // Mensaje fijo o puedes usar response.data
         duration: 1000, // 3 segundos
@@ -66,6 +86,7 @@ export class LoginPage implements OnInit {
         color: 'success',
       });
         await toast.present();
+
         this.route.navigate(['/home']); // Redirigir a Home después del mensaje
       },
       error: async (error) => {
