@@ -1,0 +1,52 @@
+.transparent-header {
+  background: transparent !important;
+}
+
+ion-toolbar {
+  --background: transparent !important;
+  --ion-color-base: transparent !important;
+  box-shadow: none !important; /* Quita cualquier sombra */
+}
+
+ion-back-button {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+ion-back-button::part(native) {
+  padding: 0 8px;
+}
+
+/* Imagen de fondo */
+.bg {
+  position: absolute; /* Permite que la imagen esté al fondo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30vh; /* Puedes ajustar la altura según necesites */
+  border-radius: 0 0 20px 20px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1; 
+}
+
+
+ion-card {
+  position: relative;
+  margin-top: 26vh; 
+  z-index: 1;
+  background: white;
+  border-radius: 20px;
+}
+
+/* Botón de regreso */
+.btnBg {
+  height: 5vh !important;
+  width: 5vh !important;
+  --border-radius: 50%;
+}
+
+.btnBgLight {
+  --background: white;
+}
