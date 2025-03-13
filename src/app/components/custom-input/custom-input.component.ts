@@ -15,6 +15,8 @@ export class CustomInputComponent  implements OnInit {
   @Input() autocomplete: string = '';
   @Input() icon: string = '';
   @Input() errorText!: string; // Mensaje de error
+  @Input() eyeToggle: boolean = false;
+  @Input() iconInput: boolean = true;
 
   constructor() { }
 

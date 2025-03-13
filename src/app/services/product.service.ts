@@ -27,6 +27,8 @@ export class ProductService {
   favoritos$ = this.favoritosSubject.asObservable();
 
   carrito$ = this.carritoSubject.asObservable();
+  private selectedProduct: any;
+
 
   constructor(private http: HttpClient, private toastController: ToastController) {
     // Cargar favoritos desde localStorage
@@ -138,5 +140,18 @@ export class ProductService {
 
   isProductCart(producto: Producto): boolean{
     return this.carrito.some((p) => p.id === producto.id);
+  }
+
+   // Método para obtener un producto por su id
+   getProductById(id: number): Observable<Producto> {
+    return this.http.get<Producto>(`${this.baseUrl}/products/${id}`);
+  }
+
+  setProduct(product: any){
+    this.selectedProduct = product;
+  }
+
+  getProduct(){
+    return this.selectedProduct;
   }
 }

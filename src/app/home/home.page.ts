@@ -6,6 +6,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { Producto } from '../interfaces/productos.interface';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { UsuarioService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -19,10 +20,14 @@ export class HomePage implements OnInit {
   carrito: Producto[] = [];
   isModalOpen = false; // Variable para controlar el estado del modal
   profileImage: string = "../../assets/icon/avtar.png";
+  titleRestaurant = "Restaurante";
+  titleDrink = "Bebidas";
+  titleBread = "Panaderia";
 
   //variabel para almacenar el id del token
   userId: number | null = null;
-  
+
+  productosFiltrados: Producto[] = [...this.productos];
 
   images: string[] = [
     '../../assets/images/promocion3.jpg',
@@ -37,7 +42,7 @@ export class HomePage implements OnInit {
     })
   
 
-  constructor(private productService: ProductService, private modalCtrl: ModalController) { 
+  constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router) { 
     setInterval(() => {
       this.nextSlide();
     }, 3000); // Cambia de imagen cada 3 segundos
@@ -63,9 +68,13 @@ export class HomePage implements OnInit {
     return ''; // Si no hay errores, retorna un string vacío
   }
 
-  async openModal() {
+  async openModal(title: string, productos: Producto[]) {
     const modal = await this.modalCtrl.create({
       component: ModalComponent,
+      componentProps: {
+        title: title,
+        productos: productos
+      }
     });
 
     return await modal.present();
@@ -78,6 +87,7 @@ export class HomePage implements OnInit {
   loadProductos(): void {
     this.productService.getProducts().subscribe((productos) => {
       this.productos = productos;
+      this.productosFiltrados = [...productos];
     });
 
     this.productService.getFavorites().subscribe((favoritos) => {
@@ -108,5 +118,24 @@ export class HomePage implements OnInit {
       console.error('Error al tomar la foto:', error);
       alert('No se pudo acceder a la cámara o la acción fue cancelada.');
     }
+  }
+
+
+  //funcion para buscar productos con el search-bar
+  searchProduct(event: any){
+    const texto = event.target.value.toLowerCase().trim();
+
+  if (texto === '') {
+    this.productosFiltrados = [...this.productos]; 
+  } else {
+    this.productosFiltrados = this.productos.filter((producto) =>
+      producto.name.toLowerCase().includes(texto)
+    );
+  }
+  }
+
+  goToDetail(product: any){
+    this.productService.setProduct(product);
+    this.router.navigate(['/product-detail']);
   }
 }
