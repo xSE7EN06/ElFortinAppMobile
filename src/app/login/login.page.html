@@ -14,11 +14,12 @@
         ></app-custom-input>
 
         <app-custom-input
-        icon="eye"
         [control]="form.controls.password"
         type="password"
         label="Contraseña"
         [errorText]="getErrorMessage('password')"
+        [eyeToggle]="true"
+        [iconInput]="false"
         ></app-custom-input>
 
         <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">

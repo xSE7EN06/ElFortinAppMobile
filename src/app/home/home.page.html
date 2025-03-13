@@ -11,7 +11,7 @@
         <ion-content>
             
          <ion-item lines="none">
-          <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"></ion-searchbar>  
+          <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"  (ionInput)="searchProduct($event)"></ion-searchbar>  
          </ion-item>
           <ion-card class="cardPromotion">
             <div class="carousel">
@@ -25,12 +25,12 @@
 
           <ion-item lines="none">
             <ion-label>
-              <h3><strong>Productos</strong></h3>
+              <h3><strong>Mejores Productos</strong></h3>
             </ion-label>
           </ion-item>
           <app-item-product 
-           *ngFor="let producto of productos" 
-            [producto]="producto">
+           *ngFor="let producto of productosFiltrados" 
+            [producto]="producto" (productSelected)="goToDetail($event)">
           </app-item-product>
         </ion-content>
     </ion-tab>
@@ -44,21 +44,21 @@
               <ion-card-header>
                 <ion-card-title>Restaurante</ion-card-title>
               </ion-card-header>
-              <ion-button fill="clear" (click)="openModal()">Ver más</ion-button>
+              <ion-button fill="clear" (click)="openModal(titleRestaurant, productosFiltrados)">Ver más</ion-button>
             </ion-card>
             <ion-card>
               <img alt="Silhouette of mountains" src="../../assets/icon/bebida.png"/>
               <ion-card-header>
                 <ion-card-title>Bebidas</ion-card-title>
               </ion-card-header>
-              <ion-button fill="clear" (click)="openModal()">Ver más</ion-button>
+              <ion-button fill="clear" (click)="openModal(titleDrink, productosFiltrados)" title="Bebidas">Ver más</ion-button>
             </ion-card>
             <ion-card>
               <img alt="Silhouette of mountains" src="../../assets/icon/panaderia.png"/>
               <ion-card-header>
                 <ion-card-title>Panaderia</ion-card-title>
               </ion-card-header>
-              <ion-button fill="clear" (click)="openModal()">Ver más</ion-button>
+              <ion-button fill="clear" (click)="openModal(titleBread, productosFiltrados)" title="Panaderia">Ver más</ion-button>
             </ion-card>
           </app-layout>
         </ion-content>
