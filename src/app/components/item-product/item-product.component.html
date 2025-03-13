@@ -1,4 +1,4 @@
-<ion-item lines="full" button lines="none">
+<ion-item lines="full" lines="none" button (click)="onProductClick()">
   <ion-thumbnail slot="start">
     <img [src]="producto.image_url" />
   </ion-thumbnail>
@@ -9,7 +9,7 @@
   </ion-label>
 
   <ion-buttons slot="end">
-    <ion-button (click)="toggleCart()">
+    <ion-button (click)="toggleCart($event)">
       <ion-icon 
       slot="icon-only"
       [name]="carrito ? 'cart' : 'cart-outline'"
@@ -17,7 +17,7 @@
     </ion-icon>
     </ion-button>
 
-    <ion-button (click)="toggleFavorite()">
+    <ion-button (click)="toggleFavorite($event)">
       <ion-icon
         slot="icon-only"
         [name]="favorite ? 'heart' : 'heart-outline'"

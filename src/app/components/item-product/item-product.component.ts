@@ -9,6 +9,8 @@ import { ProductService } from 'src/app/services/product.service';
   standalone: false
 })
 export class ItemProductComponent implements OnInit {
+  @Input() productoSelected: any;
+  @Output() productSelected = new EventEmitter<any>();
   @Input()
 
   public producto !: Producto;
@@ -34,11 +36,17 @@ export class ItemProductComponent implements OnInit {
    });
   }
 
-  toggleFavorite(): void {
+  toggleFavorite(event: Event): void {
+    event.stopPropagation();
     this.productService.toggleFavorite(this.producto);
   }
 
-  toggleCart(): void {
+  toggleCart(event: Event): void {
+    event.stopPropagation();
     this.productService.toggleCart(this.producto);
+  }
+
+  onProductClick() {
+    this.productSelected.emit(this.producto);
   }
 }
