@@ -1,0 +1,21 @@
+ion-thumbnail {
+    --size: 95px; /* Ajusta el tamaño de la imagen */
+    --border-radius: 14px;
+}
+
+.counter__section {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Espacio reducido entre los elementos */
+  }
+  
+  .count-text {
+    min-width: 30px; /* Asegura que el texto se mantenga en un espacio mínimo */
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  ion-item {
+    --padding-start: 10px; /* Ajuste a la izquierda */
+  }
