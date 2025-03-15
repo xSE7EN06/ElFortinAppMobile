@@ -31,6 +31,10 @@ const routes: Routes = [
     path: 'product-detail',
     loadChildren: () => import('./product-detail/product-detail.module').then( m => m.ProductDetailPageModule)
   },
+  {
+    path: 'no-internet',
+    loadChildren: () => import('./no-internet/no-internet.module').then( m => m.NoInternetPageModule)
+  },
 
 ];
 
