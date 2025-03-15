@@ -1,0 +1,33 @@
+<ion-list>
+  <ion-item-sliding *ngFor="let item of cartProdut">
+    <ion-item>
+      <ion-thumbnail slot="start">
+        <ion-img [src]="item.image_url"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2><strong>{{ item.name }}</strong></h2>
+        <p>{{item.category_name}}</p>
+        <p><strong>${{ item.price }}</strong></p>
+      </ion-label>
+
+       <!-- Sección de incremento/decremento -->
+       <ion-buttons slot="end" class="counter__section">
+        <ion-button fill="clear" (click)="decrement()">
+          <ion-icon name="remove-outline"></ion-icon>
+        </ion-button>
+
+        <p class="count-text">{{ count }}</p>
+
+        <ion-button fill="clear" (click)="increment()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <ion-item-options side="end">
+      <ion-item-option color="danger" expandable="true" (click)="removeFromCart(item)">
+        <ion-icon slot="icon-only" name="trash" color="light"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>

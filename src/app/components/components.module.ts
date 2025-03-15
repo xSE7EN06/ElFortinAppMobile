@@ -10,6 +10,7 @@ import { ItemProductComponent } from './item-product/item-product.component';
 import { LayoutComponent } from './layout/layout.component';
 import { ItemCartComponent } from './item-cart/item-cart.component';
 import { ModalComponent } from './modal/modal.component';
+import { ItemOptionComponent } from './item-option/item-option.component';
 
 
 
@@ -22,7 +23,8 @@ import { ModalComponent } from './modal/modal.component';
     ItemProductComponent,
     LayoutComponent,
     ItemCartComponent,
-    ModalComponent
+    ModalComponent,
+    ItemOptionComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { ModalComponent } from './modal/modal.component';
     ItemProductComponent,
     LayoutComponent,
     ItemCartComponent,
-    ModalComponent
+    ModalComponent,
+    ItemOptionComponent
   ]
 })
 export class ComponentsModule { }

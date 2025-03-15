@@ -30,27 +30,6 @@ export class CartPage implements OnInit {
     });
   }
 
-  async removeFromCart(item: Producto) {
-    const alert = await this.alertController.create({
-      header: 'Eliminar producto',
-      message: `¿Estás seguro de que deseas eliminar ${item.name} del carrito?`,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Eliminar',
-          handler: () => {
-            this.productService.toggleCart(item);
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
   async checkout() {
     if (this.cart.length === 0) {
       this.presentToast('El carrito está vacío.', 'warning');
