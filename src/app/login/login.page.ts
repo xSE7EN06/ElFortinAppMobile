@@ -5,7 +5,7 @@ import { AlertController, LoadingController, NavController, Platform, ToastContr
 import { UsuarioService } from '../services/user.service';
 import { App } from '@capacitor/app';
 import { HeaderComponent } from '../components/header/header.component';
-
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-login',
@@ -61,45 +61,61 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({
-      message: "Iniciando sesión...",
+    // Mostrar loading al hacer clic en el botón
+  const loading = await this.loadingCtrl.create({
+    message: "Iniciando sesión...",
+  });
+  await loading.present();
+
+  // Verificar conexión a internet
+  const status = await Network.getStatus();
+  if (!status.connected) {
+    await loading.dismiss(); // Cerrar el loading si no hay internet
+
+    const alert = await this.alertCtrl.create({
+      header: 'No se puede iniciar sesión',
+      message: 'Se produjo un error inesperado. Intenta iniciar sesión de nuevo.',
+      buttons: ['Aceptar']
     });
+    await alert.present();
 
-    await loading.present(); // Espera a que se muestre el loading
+    this.router.navigate(['/no-internet']); // Redirige a la página de sin conexión
+    return;
+  }
 
-    
-    const { email, password } = this.form.value as { email: string; password: string };
-    console.log('Datos enviados:', { email, password });
+  // Si hay conexión, continuar con el login
+  const { email, password } = this.form.value as { email: string; password: string };
+  console.log('Datos enviados:', { email, password });
 
-    this.usuarioService.login(email, password).subscribe({
-      next: async (response) => {
-        await loading.dismiss();
-        
-        if(response.token){
-          localStorage.setItem('token', response.token);
-        }
+  this.usuarioService.login(email, password).subscribe({
+    next: async (response) => {
+      await loading.dismiss(); // Cerrar el loading después del login exitoso
+      
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+      }
 
-        const toast = await this.toastController.create({
-        message: '¡Bienvenido!', // Mensaje fijo o puedes usar response.data
-        duration: 1000, // 3 segundos
+      const toast = await this.toastController.create({
+        message: '¡Bienvenido!',
+        duration: 1000,
         position: 'middle',
         color: 'success',
       });
-        await toast.present();
+      await toast.present();
 
-        this.route.navigate(['/home']); // Redirigir a Home después del mensaje
-      },
-      error: async (error) => {
-        console.error('Error en login:', error);
-        await loading.dismiss();
+      this.router.navigate(['/home']); // Redirigir a Home después del mensaje
+    },
+    error: async (error) => {
+      console.error('Error en login:', error);
+      await loading.dismiss(); // Cerrar el loading si hay un error en el login
 
-        const alert = await this.alertCtrl.create({
-          header: 'Error',
-          message: 'Usuario o contraseña incorrectos.',
-          buttons: ['OK']
-        });
-        await alert.present();
-      }
-    });
-  }
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Usuario o contraseña incorrectos.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
+  });
+ }
 }
