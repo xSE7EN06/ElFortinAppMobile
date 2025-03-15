@@ -1,0 +1,23 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/login">
+        <ion-icon slot="icon-only" name="close-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container">
+    <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+    <ion-text>
+      <h2><strong>La página no está disponible en este momento</strong></h2>
+      <p>Puede deberse a un error técnico que estamos intentando solucionar. Vuelve a cargar esta página.</p>
+    </ion-text>
+    <ion-button expand="block" (click)="retry()" mode="ios">
+      <ion-icon slot="start" name="refresh-outline"></ion-icon>
+      Actualizar
+    </ion-button>
+  </div>
+</ion-content>
