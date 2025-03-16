@@ -13,7 +13,8 @@
       <ion-icon 
       slot="icon-only"
       [name]="carrito ? 'cart' : 'cart-outline'"
-      [ngClass]="{ 'carrito': carrito}">
+      [ngClass]="{ 'carrito': carrito}"
+      *ngIf="iconCart">
     </ion-icon>
     </ion-button>
 
@@ -21,7 +22,8 @@
       <ion-icon
         slot="icon-only"
         [name]="favorite ? 'heart' : 'heart-outline'"
-        [ngClass]="{ 'favorite': favorite }">
+        [ngClass]="{ 'favorite': favorite }"
+        *ngIf="iconFavorite">
       </ion-icon>
     </ion-button>
   </ion-buttons>

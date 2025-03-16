@@ -13,6 +13,8 @@ import { Producto } from '../interfaces/productos.interface';
 })
 export class CartPage implements OnInit {
   cart: Producto[] = [];
+  isModalOpen = false;
+  itemToRemove: Producto | null = null;
 
   constructor(
     private productService: ProductService,
@@ -85,4 +87,23 @@ export class CartPage implements OnInit {
     doc.text(`Total a pagar: $${this.getTotal().toFixed(2)}`, 10, y + 10);
     doc.save('comprobante-de-compra.pdf'); // Save the PDF document
   }
+
+  openConfirmModal(item: Producto) {
+    this.itemToRemove = item;
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.itemToRemove = null;
+  }
+
+  async removeFromCart() {
+    if (this.itemToRemove) {
+      await this.productService.toggleCart(this.itemToRemove);
+      this.cart = this.cart.filter(p => p !== this.itemToRemove);
+    }
+    this.closeModal();
+  }
+
 }

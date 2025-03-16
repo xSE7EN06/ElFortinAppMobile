@@ -69,7 +69,7 @@
     <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
       <app-item-product 
         *ngFor="let producto of favoritos" 
-        [producto]="producto">
+        [producto]="producto" >
       </app-item-product>
     </ion-list>
 

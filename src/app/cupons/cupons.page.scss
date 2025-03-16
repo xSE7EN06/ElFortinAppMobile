@@ -1,0 +1,80 @@
+.ticket-card {
+    width: 90%;
+    max-width: 350px;
+    margin: 25px auto;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    background-color: #c4c0be;
+  
+    /* Efecto de círculos en los lados */
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+  
+    &::before {
+      left: -30px;
+    }
+  
+    &::after {
+      right: -30px;
+    }
+  }
+  
+  .ticket-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Reducido para que se vea más cercano */
+  }
+  
+  .ticket-profile_image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-left: 20px;
+  }
+  
+  .ticket-profile_name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  
+  .ticket-contens {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Esto asegura que el icono y el texto estén separados */
+    gap: 10px;
+    margin-left: 30px;
+    font-size: 1rem;
+  
+    /* Alineación específica del icono y texto */
+    .iconStarts {
+      font-size: 50px; /* Ajustamos el tamaño del icono */ /* Hacemos que el icono sea blanco */
+    }
+  
+    p {
+      margin: 0; /* Elimina márgenes por defecto */
+      font-size: 1rem; /* Aseguramos que el texto sea blanco */
+    }
+  }
+  
+  .ticket-event img {
+    max-width: 100%;
+    margin-top: 20px;
+  }
+
+  .btnCopy{
+    margin-top: 20px;
+    height: 45px;
+  }
