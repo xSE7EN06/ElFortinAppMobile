@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-
+import { AlertController, LoadingController, NavController, Platform, ToastController } from '@ionic/angular';
+import { UsuarioService } from '../services/user.service';
+import { App } from '@capacitor/app';
+import { HeaderComponent } from '../components/header/header.component';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +15,28 @@ import { LoadingController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
 
+  @ViewChild(HeaderComponent) headerComponent: HeaderComponent | undefined;
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   })
 
-  constructor(private loadingCtrl: LoadingController, private route: Router) { }
+  constructor(private loadingCtrl: LoadingController, private route: Router,  private alertCtrl: AlertController,
+    private usuarioService: UsuarioService, private toastController: ToastController, private plataform: Platform,
+    private navCtrl: NavController, private router: Router
+  ) {
+    this.plataform.backButton.subscribeWithPriority(10, ()=> {
+      const currentUrl = this.router.url;
+      if(currentUrl === '/login' || currentUrl === "/splash"){
+        App.exitApp();
+      }else if(currentUrl === '/home'){
+        if(this.headerComponent)
+          this.headerComponent.confirmLogout();
+      }else{
+        this.navCtrl.back();
+      }
+    });
+  }
 
   ngOnInit() {
   }
@@ -38,15 +57,65 @@ export class LoginPage implements OnInit {
   }
 
   async login(){
-    const loading = await this.loadingCtrl.create({
-      message: "Iniciando sesión",
-      duration: 2000,
+    if (this.form.invalid) {
+      return;
+    }
+
+    // Mostrar loading al hacer clic en el botón
+  const loading = await this.loadingCtrl.create({
+    message: "Iniciando sesión...",
+  });
+  await loading.present();
+
+  // Verificar conexión a internet
+  const status = await Network.getStatus();
+  if (!status.connected) {
+    await loading.dismiss(); // Cerrar el loading si no hay internet
+
+    const alert = await this.alertCtrl.create({
+      header: 'No se puede iniciar sesión',
+      message: 'Se produjo un error inesperado. Intenta iniciar sesión de nuevo.',
+      buttons: ['Aceptar']
     });
+    await alert.present();
 
-    await loading.present(); // Espera a que se muestre el loading
-
-    await loading.onDidDismiss(); // Espera a que termine el loading antes de navegar
-  
-    this.route.navigate(['/home']); // Ahora se ejecuta la navegación
+    this.router.navigate(['/no-internet']); // Redirige a la página de sin conexión
+    return;
   }
+
+  // Si hay conexión, continuar con el login
+  const { email, password } = this.form.value as { email: string; password: string };
+  console.log('Datos enviados:', { email, password });
+
+  this.usuarioService.login(email, password).subscribe({
+    next: async (response) => {
+      await loading.dismiss(); // Cerrar el loading después del login exitoso
+      
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+      }
+
+      const toast = await this.toastController.create({
+        message: '¡Bienvenido!',
+        duration: 1000,
+        position: 'middle',
+        color: 'success',
+      });
+      await toast.present();
+
+      this.router.navigate(['/home']); // Redirigir a Home después del mensaje
+    },
+    error: async (error) => {
+      console.error('Error en login:', error);
+      await loading.dismiss(); // Cerrar el loading si hay un error en el login
+
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Usuario o contraseña incorrectos.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
+  });
+ }
 }

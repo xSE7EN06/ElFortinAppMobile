@@ -1,21 +1,30 @@
-<ion-list>
-  <ion-item lines="full" button lines="none">
-    <ion-thumbnail slot="start">
-      <img [src]="image" />
-    </ion-thumbnail>
-    <ion-label>
-      <strong><h2>{{title}}</h2></strong>
-      <p>{{description}}</p>
-      <strong><p>$ {{price}}</p></strong>
-    </ion-label>
+<ion-item lines="full" lines="none" button (click)="onProductClick()">
+  <ion-thumbnail slot="start">
+    <img [src]="producto.image_url" />
+  </ion-thumbnail>
+  <ion-label>
+    <strong><h2>{{producto.name}}</h2></strong>
+    <p>{{producto.category_name}}</p>
+    <strong><p>$ {{producto.price}}</p></strong>
+  </ion-label>
 
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
-      </ion-button>
-      <ion-button>
-        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-item>
-</ion-list>
+  <ion-buttons slot="end">
+    <ion-button (click)="toggleCart($event)">
+      <ion-icon 
+      slot="icon-only"
+      [name]="carrito ? 'cart' : 'cart-outline'"
+      [ngClass]="{ 'carrito': carrito}"
+      *ngIf="iconCart">
+    </ion-icon>
+    </ion-button>
+
+    <ion-button (click)="toggleFavorite($event)">
+      <ion-icon
+        slot="icon-only"
+        [name]="favorite ? 'heart' : 'heart-outline'"
+        [ngClass]="{ 'favorite': favorite }"
+        *ngIf="iconFavorite">
+      </ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-item>

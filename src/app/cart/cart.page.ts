@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
-import { ProductService, Producto } from '../services/product.service';
+import { ProductService } from '../services/product.service';
 import { jsPDF } from 'jspdf';
+import { Producto } from '../interfaces/productos.interface';
 
 
 @Component({
@@ -12,6 +13,8 @@ import { jsPDF } from 'jspdf';
 })
 export class CartPage implements OnInit {
   cart: Producto[] = [];
+  isModalOpen = false;
+  itemToRemove: Producto | null = null;
 
   constructor(
     private productService: ProductService,
@@ -23,32 +26,10 @@ export class CartPage implements OnInit {
     this.loadCart();
   }
 
-  loadCart() {
-    this.productService.getProductos().subscribe((productos) => {
+  loadCart(): void{
+    this.productService.getProductsCart().subscribe((productos) => {
       this.cart = productos; // Load products into cart
     });
-  }
-
-  async removeFromCart(item: Producto) {
-    const alert = await this.alertController.create({
-      header: 'Eliminar producto',
-      message: `¿Estás seguro de que deseas eliminar ${item.title} del carrito?`,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Eliminar',
-          handler: () => {
-            this.cart = this.cart.filter(cartItem => cartItem.id !== item.id);
-            this.presentToast('Producto eliminado del carrito.');
-          }
-        }
-      ]
-    });
-
-    await alert.present();
   }
 
   async checkout() {
@@ -99,11 +80,30 @@ export class CartPage implements OnInit {
     let y = 20; // Variable to manage vertical position for lines
 
     this.cart.forEach((item, index) => {
-      doc.text(`${index + 1}. ${item.title}, Precio: $${item.price.toFixed(2)}`, 10, y);
+      doc.text(`${index + 1}. ${item.name}, Precio: $${item.price.toFixed(2)}`, 10, y);
       y += 10; // Increment the y position so texts don't overlap
     });
 
     doc.text(`Total a pagar: $${this.getTotal().toFixed(2)}`, 10, y + 10);
     doc.save('comprobante-de-compra.pdf'); // Save the PDF document
   }
+
+  openConfirmModal(item: Producto) {
+    this.itemToRemove = item;
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.itemToRemove = null;
+  }
+
+  async removeFromCart() {
+    if (this.itemToRemove) {
+      await this.productService.toggleCart(this.itemToRemove);
+      this.cart = this.cart.filter(p => p !== this.itemToRemove);
+    }
+    this.closeModal();
+  }
+
 }

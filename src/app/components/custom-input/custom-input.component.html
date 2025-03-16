@@ -1,5 +1,4 @@
 <ion-item class="custom-input" lines="none"> 
-  <ion-icon color="primary" *ngIf="icon" slot="start" [name]="icon"></ion-icon>
 
   <ion-input  
   [type]="type"
@@ -11,5 +10,9 @@
   class="inputs"
   [errorText]="errorText"
   >
+  <ion-input-password-toggle slot="end" *ngIf="eyeToggle"></ion-input-password-toggle>
+  <ion-button fill="clear" slot="end" aria-label="Show/hide" *ngIf="iconInput">
+    <ion-icon slot="icon-only" [name]="icon" *ngIf="icon"></ion-icon>
+  </ion-button>
   </ion-input>
 </ion-item>

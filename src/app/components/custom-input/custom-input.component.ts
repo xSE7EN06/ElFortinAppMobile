@@ -15,9 +15,18 @@ export class CustomInputComponent  implements OnInit {
   @Input() autocomplete: string = '';
   @Input() icon: string = '';
   @Input() errorText!: string; // Mensaje de error
+  @Input() eyeToggle: boolean = false;
+  @Input() iconInput: boolean = true;
 
   constructor() { }
 
   ngOnInit() {}
+
+  getErrorMessage(): string {
+    if (!this.control) return '';
+    if (this.control.hasError('required')) return 'Este campo es obligatorio.';
+    if (this.control.hasError('email')) return 'Ingresa un correo electrónico válido.';
+    return '';
+  }
 
 }

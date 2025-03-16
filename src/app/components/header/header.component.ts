@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -14,9 +15,10 @@ export class HeaderComponent  implements OnInit {
   @Input() title !: string;
   @Input() showLogout: boolean = true; // Controla la visibilidad del botón
   @Input() mostrar: boolean = true;
+  @Input() mostrarBtnModal: boolean = true;
 
   constructor(private alertController: AlertController,
-    private toastController: ToastController, private route: Router) { }
+    private toastController: ToastController, private route: Router, private userServices: UsuarioService) { }
 
   ngOnInit() {}
 
@@ -36,8 +38,7 @@ export class HeaderComponent  implements OnInit {
           text: 'Cerrar Sesión',
           handler: () => {
             console.log('Cerrando sesión...');
-            // Aquí añadirías la lógica para manejar el cierre de sesión
-            // Por ejemplo, llamar a authService.logout() o similar
+            this.userServices.logOut();
             this.presentToast('Sesión cerrada.', 'success').then(() => {
               this.route.navigate(['/login']); // Navega al login después de mostrar el toast
             });
@@ -56,6 +57,10 @@ export class HeaderComponent  implements OnInit {
       color
     });
     toast.present();
+  }
+
+  closeModal(event: any) {
+    event.target.closest('ion-modal').dismiss();
   }
 
 }

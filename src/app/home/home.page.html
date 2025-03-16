@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content fullscreen="true">
   <ion-tabs>
     <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="buttonFab">
       <ion-fab-button routerLink="/cart">
@@ -7,45 +7,97 @@
     </ion-fab>
 
     <ion-tab tab="home">
-        <app-header title="Inicio" [mostrar]="false"></app-header>
+        <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
-          <app-item-product
-            *ngFor="let producto of productos"
-            [title]="producto.title"
-            [description]="producto.description"
-            [price]="producto.price"
-            [image]="producto.image">
+         <ion-item lines="none">
+          <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"  (ionInput)="searchProduct($event)"></ion-searchbar>  
+         </ion-item>
+          <ion-card class="cardPromotion">
+            <div class="carousel">
+              <div class="slides" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+                <div *ngFor="let image of images" class="slide">
+                  <img [src]="image" alt="Slide">
+                </div>
+              </div>
+            </div>
+          </ion-card>
+
+          <ion-item lines="none">
+            <ion-label>
+              <h3><strong>Mejores Productos</strong></h3>
+            </ion-label>
+          </ion-item>
+          <app-item-product 
+           *ngFor="let producto of productosFiltrados" 
+            [producto]="producto" (productSelected)="goToDetail($event)">
           </app-item-product>
         </ion-content>
     </ion-tab>
 
     <ion-tab tab="menu">
-        <app-header title="Servicios" [mostrar]="false"></app-header>
+        <app-header title="Servicios" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <app-layout>
-          <app-card-product imagen="../../assets/icon/panaderia.png" title="Panaderia"></app-card-product>
-          <app-card-product imagen="../../assets/icon/bebida.png" title="Bebidas"></app-card-product>
-          <app-card-product imagen="../../assets/icon/pizza.png" title="Restaurante"></app-card-product>
+            <ion-card>
+              <img alt="Silhouette of mountains" src="../../assets/icon/pizza.png"/>
+              <ion-card-header>
+                <ion-card-title>Restaurante</ion-card-title>
+              </ion-card-header>
+              <ion-button fill="clear" (click)="openModal(titleRestaurant, productosFiltrados)">Ver más</ion-button>
+            </ion-card>
+            <ion-card>
+              <img alt="Silhouette of mountains" src="../../assets/icon/bebida.png"/>
+              <ion-card-header>
+                <ion-card-title>Bebidas</ion-card-title>
+              </ion-card-header>
+              <ion-button fill="clear" (click)="openModal(titleDrink, productosFiltrados)" title="Bebidas">Ver más</ion-button>
+            </ion-card>
+            <ion-card>
+              <img alt="Silhouette of mountains" src="../../assets/icon/panaderia.png"/>
+              <ion-card-header>
+                <ion-card-title>Panaderia</ion-card-title>
+              </ion-card-header>
+              <ion-button fill="clear" (click)="openModal(titleBread, productosFiltrados)" title="Panaderia">Ver más</ion-button>
+            </ion-card>
           </app-layout>
         </ion-content>
     </ion-tab>
 
     <ion-tab tab="favorites">
-        <app-header title="Favoritos" [mostrar]="false"></app-header>
-        <ion-content>
-          <div class="empty-favorites">
-            <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
-            <p>No hay nada asignado a favoritos, por favor agregue elementos.</p>
-          </div>
-        </ion-content>
+      <app-header title="Favoritos" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
+  <ion-content>
+    <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
+      <app-item-product 
+        *ngFor="let producto of favoritos" 
+        [producto]="producto" >
+      </app-item-product>
+    </ion-list>
+
+    <ng-template #noFavoritos>
+      <div class="empty-favorites">
+        <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
+        <p>No hay productos en favoritos. Agrega algunos productos.</p>
+      </div>
+    </ng-template>
+  </ion-content>
     </ion-tab>
+    
+    
 
     <ion-tab tab="account">
-        <app-header title="Perfil" [mostrar]="false"></app-header>
+        <app-header title="Perfil" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
           <form [formGroup]="form">
-            <app-logo imagen="https://ionicframework.com/docs/img/demos/avatar.svg"></app-logo>
-
+            <div class="contenidoImagen">
+              <ion-avatar class="profile-avatar">
+                <img alt="Silhouette of a person's head" [src]="profileImage" />
+                <ion-fab  class="fab-custom-position" vertical="bottom" horizontal="end">
+                  <ion-fab-button color="success" (click)="takePhoto()">
+                    <ion-icon name="camera-outline" color="dark"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>  
+              </ion-avatar>
+            </div>
             <ion-card>
               <ion-card-header>
                 <ion-card-title style="text-align: center;">

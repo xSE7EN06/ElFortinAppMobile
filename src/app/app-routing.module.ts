@@ -28,8 +28,16 @@ const routes: Routes = [
     loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
   },
   {
-    path: 'product-item',
-    loadChildren: () => import('./product-item/product-item.module').then( m => m.ProductItemPageModule)
+    path: 'product-detail',
+    loadChildren: () => import('./product-detail/product-detail.module').then( m => m.ProductDetailPageModule)
+  },
+  {
+    path: 'no-internet',
+    loadChildren: () => import('./no-internet/no-internet.module').then( m => m.NoInternetPageModule)
+  },
+  {
+    path: 'cupons',
+    loadChildren: () => import('./cupons/cupons.module').then( m => m.CuponsPageModule)
   },
 
 ];

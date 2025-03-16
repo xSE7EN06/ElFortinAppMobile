@@ -1,0 +1,93 @@
+.checkout-footer {
+  background: white;
+  padding: 16px;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.promo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.promo-chip {
+  display: flex; 
+  align-items: center;
+  gap: 10px; 
+  padding: 5px;
+  width: 100%;
+  max-width: 400px; 
+}
+
+ion-input {
+  flex: 1; 
+}
+
+.buttonPromotion {
+  white-space: nowrap; 
+}
+
+
+.custom-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-item ion-label {
+  display: flex;
+  align-items: center;
+}
+
+.custom-note {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #222; /* Color oscuro por defecto */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 80px;
+}
+
+.discount {
+  color: red; /* Resalta los descuentos */
+}
+
+.total {
+  color: green; /* Resalta el costo total */
+}
+
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #666;
+}
+
+.empty-cart p{
+  font-size: 20px
+}
+
+.warning-icon {
+  font-size: 100px;
+  color: #f39c12; /* Color de advertencia */
+  margin-bottom: 10px;
+}
+
+ion-modal{
+  --border-radius: 30px;
+}
+
+.textHeaderModal{
+  text-align: center;
+  font-size: 18px;
+}
+
+.noRemove{
+  color: white;
+}
