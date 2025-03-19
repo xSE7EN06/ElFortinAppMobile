@@ -18,6 +18,9 @@ export class ItemProductComponent implements OnInit {
   favorite: boolean = false;
   carrito: boolean = false;
 
+  @Input() iconFavorite: boolean = true;
+  @Input() iconCart: boolean = true;
+
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {

@@ -1,0 +1,31 @@
+<app-header title="Cupones" [mostrarBtnModal]="false" [showLogout]="false"></app-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item lines="none">
+      <ion-icon name="information-circle-outline" size="large" color="primary"></ion-icon>
+      <p style="margin-left: 10px; font-size: 17px;"><strong>Cupones para tí</strong></p>
+    </ion-item>
+    <ion-item *ngFor="let cupons of cupones">
+      <div class="ticket-card">
+        <div class="ticket-profile">
+          <ion-avatar>
+            <img
+            src="../../assets/icon/logop.png"
+            alt="madflows"
+            class="ticket-profile_image"
+          />
+          </ion-avatar>
+          <div class="ticket-profile_text">
+            <p class="ticket-profile_name">{{cupons.code}}</p>
+          </div>
+        </div>
+        <div class="ticket-contens">
+          <ion-icon name="sparkles" color="primary" class="iconStarts"></ion-icon>
+          <p><strong>{{cupons.description}}</strong></p>
+        </div>
+          <ion-button expand="block" mode="ios" class="btnCopy" (click)="copyToClipPromo(cupons.code)">Copiar Código</ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

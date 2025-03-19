@@ -5,5 +5,6 @@ export interface Usuario{
     phone: number;
     name: string;
     image_url: string;
+    created_at: string;
 }
 

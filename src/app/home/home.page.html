@@ -9,7 +9,6 @@
     <ion-tab tab="home">
         <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
-            
          <ion-item lines="none">
           <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"  (ionInput)="searchProduct($event)"></ion-searchbar>  
          </ion-item>
@@ -70,7 +69,7 @@
     <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
       <app-item-product 
         *ngFor="let producto of favoritos" 
-        [producto]="producto">
+        [producto]="producto" >
       </app-item-product>
     </ion-list>
 
