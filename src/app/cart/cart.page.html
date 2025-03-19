@@ -49,23 +49,24 @@
 <ion-footer class="checkout-footer">
   <div class="promo-section">
     <ion-chip  class="promo-chip">
-      <ion-input label="Código:" placeholder="FHSGZWEYRED3"></ion-input>
+      <ion-input label="Código:" placeholder="FHSGZWEYRED3" [(ngModel)]="inputCode" (ngModelChange)="searchCupon()"></ion-input>
       <ion-button mode="ios" class="buttonPromotion" routerLink="/cupons">Ver códigos</ion-button>
     </ion-chip>
   </div>
+  <p *ngIf="couponErrorMessage" style="color: red; font-size: 14px;">{{ couponErrorMessage }}</p>
 
   <ion-list>
     <ion-item lines="none" class="custom-item">
       <ion-label>Subtotal</ion-label>
-      <ion-note class="custom-note" slot="end"><strong>$92.00</strong></ion-note>
+      <ion-note class="custom-note" slot="end"><strong>{{subtotal}}</strong></ion-note>
     </ion-item>
     <ion-item class="custom-item">
       <ion-label>Descuento</ion-label>
-      <ion-note class="custom-note discount" slot="end"><strong>-$92.00</strong></ion-note>
+      <ion-note class="custom-note discount" slot="end"><strong>-{{discount}}</strong></ion-note>
     </ion-item>
     <ion-item lines="none" class="custom-item">
       <ion-label>Costo Total</ion-label>
-      <ion-note class="custom-note total" slot="end"><strong>$92.00</strong></ion-note>
+      <ion-note class="custom-note total" slot="end"><strong>{{total}}</strong></ion-note>
     </ion-item>
   </ion-list>
 

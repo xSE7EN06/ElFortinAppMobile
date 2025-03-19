@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Usuario } from "../interfaces/usuarios.interface";
 import { environment } from '../../environments/environment.prod';
 import { HttpClient } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import { Observable, of, tap } from "rxjs";
 import { jwtDecode } from "jwt-decode";
 
 @Injectable({
@@ -33,7 +33,6 @@ export class UsuarioService {
 
         try{
             const decoded: any = jwtDecode(token);
-            console.log(decoded.id);
             return decoded.id;
         }catch(error){
             console.log("Error al decodificar el token", error);
@@ -43,5 +42,10 @@ export class UsuarioService {
 
     logOut(){
         localStorage.removeItem('token');
+    }
+
+    getUserById(id: number | null): Observable<Usuario | null>{
+      if(id === null) return of(null);
+      return this.http.get<Usuario>(`${this.baseUrl}/usuarios/${id}`);
     }
 }

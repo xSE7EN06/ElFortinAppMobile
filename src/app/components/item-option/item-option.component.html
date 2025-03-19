@@ -7,7 +7,7 @@
       <ion-label>
         <h2><strong>{{ item.name }}</strong></h2>
         <p>{{item.category_name}}</p>
-        <p><strong>${{ item.price }}</strong></p>
+        <p><strong>${{  item.price | number: '1.2-2' }}</strong></p>
       </ion-label>
 
        <!-- Sección de incremento/decremento -->
@@ -16,7 +16,7 @@
           <ion-icon name="remove-outline"></ion-icon>
         </ion-button>
 
-        <p class="count-text">{{ countMap.get(item.id) || 0  }}</p>
+        <p class="count-text">{{ countMap.get(item.id) || 0 }}</p>
 
         <ion-button fill="clear" (click)="increment(item)">
           <ion-icon name="add-outline"></ion-icon>

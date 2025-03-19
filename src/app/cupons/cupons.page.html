@@ -6,7 +6,7 @@
       <ion-icon name="information-circle-outline" size="large" color="primary"></ion-icon>
       <p style="margin-left: 10px; font-size: 17px;"><strong>Cupones para tí</strong></p>
     </ion-item>
-    <ion-item>
+    <ion-item *ngFor="let cupons of cupones">
       <div class="ticket-card">
         <div class="ticket-profile">
           <ion-avatar>
@@ -17,62 +17,15 @@
           />
           </ion-avatar>
           <div class="ticket-profile_text">
-            <p class="ticket-profile_name">SUMMER10</p>
+            <p class="ticket-profile_name">{{cupons.code}}</p>
           </div>
         </div>
         <div class="ticket-contens">
           <ion-icon name="sparkles" color="primary" class="iconStarts"></ion-icon>
-          <p><strong>10% de descuento en productos de verano</strong></p>
+          <p><strong>{{cupons.description}}</strong></p>
         </div>
-          <ion-button expand="block" mode="ios" class="btnCopy">Copiar Código</ion-button>
+          <ion-button expand="block" mode="ios" class="btnCopy" (click)="copyToClipPromo(cupons.code)">Copiar Código</ion-button>
       </div>
     </ion-item>
   </ion-list>
 </ion-content>
- <!--- <ion-list lines="none">
-    <ion-item lines="none">
-      <p style="font-size: 18px;"><strong>Cupones para tí</strong></p>
-    </ion-item>
-    <ion-item>
-      <ion-card class="ticket-card">
-        <ion-card-header>
-          <ion-card-title><strong>🎟️SUMMER10</strong></ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="ticket-content">
-            <ion-icon name="sparkles" color="primary"></ion-icon>
-            <p><strong>10% de descuento en productos de verano</strong></p>
-          </div>
-        </ion-card-content>
-        <ion-button expand="block" mode="ios">Copiar código</ion-button>
-      </ion-card>
-    </ion-item>
-    <ion-item>
-      <ion-card class="ticket-card">
-        <ion-card-header>
-          <ion-card-title><strong>🎟️SUMMER10</strong></ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="ticket-content">
-            <ion-icon name="sparkles" color="primary"></ion-icon>
-            <p><strong>10% de descuento en productos de verano</strong></p>
-          </div>
-        </ion-card-content>
-        <ion-button expand="block" mode="ios">Copiar código</ion-button>
-      </ion-card>
-    </ion-item>
-    <ion-item>
-      <ion-card class="ticket-card">
-        <ion-card-header>
-          <ion-card-title><strong>🎟️SUMMER10</strong></ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="ticket-content">
-            <ion-icon name="sparkles" color="primary"></ion-icon>
-            <p><strong>10% de descuento en productos de verano</strong></p>
-          </div>
-        </ion-card-content>
-        <ion-button expand="block" mode="ios">Copiar código</ion-button>
-      </ion-card>
-    </ion-item>
-  </ion-list>-->
