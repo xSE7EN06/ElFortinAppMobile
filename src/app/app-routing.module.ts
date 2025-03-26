@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'cupons',
     loadChildren: () => import('./cupons/cupons.module').then( m => m.CuponsPageModule)
   },
+  {
+    path: 'orders',
+    loadChildren: () => import('./orders/orders.module').then( m => m.OrdersPageModule)
+  },
 
 ];
 
