@@ -1,5 +1,8 @@
-<app-header title="Mi Carrito" [mostrarBtnModal]="false"></app-header>
+<app-header title="Mi Carrito" [mostrarBtnModal]="false" [showLogout]="false"></app-header>
 <ion-content>
+  <ion-note color="primary" routerLink="/orders">
+    <strong>Ver ordenes</strong>
+  </ion-note>
   <ng-container *ngIf="cart.length > 0; else emptyCart">
     <app-item-option [cartProdut]="cart" (confirmRemove)="openConfirmModal($event)"></app-item-option>
   </ng-container>
