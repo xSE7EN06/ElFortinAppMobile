@@ -13,7 +13,7 @@ export class ItemOptionComponent  implements OnInit {
 
   @Input() cartProdut: Producto[] = [];
   @Output() confirmRemove = new EventEmitter<Producto>();
-  countMap = new Map<number, number>();
+  @Output() countMap = new Map<number, number>();
 
   constructor(private alertController: AlertController, private productService: ProductService, private ngZone: NgZone) { }
 

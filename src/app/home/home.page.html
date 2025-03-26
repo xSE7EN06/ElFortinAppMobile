@@ -1,9 +1,20 @@
 <ion-content fullscreen="true">
   <ion-tabs>
     <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="buttonFab">
-      <ion-fab-button routerLink="/cart">
+      <!-- Botón principal que activa el menú FAB -->
+      <ion-fab-button (click)="toggleFab()">
         <ion-icon name="cart"></ion-icon>
       </ion-fab-button>
+  
+      <!-- Menú FAB, visible cuando `fabOpen` es true -->
+      <ion-fab-list side="top" *ngIf="fabOpen">
+        <ion-fab-button>
+          <ion-icon name="cart" routerLink="/cart"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button>
+          <ion-icon name="clipboard" routerLink="/orders"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
     </ion-fab>
 
     <ion-tab tab="home">
@@ -16,7 +27,7 @@
             <div class="carousel">
               <div class="slides" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
                 <div *ngFor="let image of images" class="slide">
-                  <img [src]="image" alt="Slide">
+                  <img [src]="image" alt="Slide" loading="lazy">
                 </div>
               </div>
             </div>
@@ -87,7 +98,7 @@
     <ion-tab tab="account">
         <app-header title="Perfil" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
         <ion-content>
-          <form [formGroup]="form">
+          <form [formGroup]="userForm">
             <div class="contenidoImagen">
               <ion-avatar class="profile-avatar">
                 <img alt="Silhouette of a person's head" [src]="profileImage" />
@@ -107,8 +118,13 @@
               <ion-card-content>
                 <ion-list lines="full">
                   <ion-item>
-                    <ion-label position="floating">Nombre</ion-label>
-                    <ion-input type="text" required></ion-input>
+                    <app-custom-input
+                    icon="person"
+                    [control]="userForm.controls.names"
+                    type="text"
+                    label="Nombres"
+                    [errorText]="getErrorMessage('names')">
+                  </app-custom-input>
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Apellidos</ion-label>

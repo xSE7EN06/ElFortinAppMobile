@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { ProductService } from '../services/product.service';
 import { jsPDF } from 'jspdf';
 import { Producto } from '../interfaces/productos.interface';
+import { CuponsService } from '../services/cupon/cupons.service';
 
 
 @Component({
@@ -15,11 +16,21 @@ export class CartPage implements OnInit {
   cart: Producto[] = [];
   isModalOpen = false;
   itemToRemove: Producto | null = null;
+  inputCode: string = "";
+  couponErrorMessage: string = "";
+  input: boolean = true;
+
+  //variables para la logica de compra
+  subtotal: number = 0;
+  total: number = 0;
+  discount: number = 0;
+
 
   constructor(
     private productService: ProductService,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private cuponService: CuponsService
   ) {}
 
   ngOnInit() {
@@ -34,7 +45,7 @@ export class CartPage implements OnInit {
 
   async checkout() {
     if (this.cart.length === 0) {
-      this.presentToast('El carrito está vacío.', 'warning');
+      this.presentToast('El carrito está vacío.', 'success');
       return;
     }
 
@@ -61,7 +72,10 @@ export class CartPage implements OnInit {
   }
 
   getTotal(): number {
-    return this.cart.reduce((total, item) => total + item.price, 0);
+    this.subtotal = this.cart.reduce((total, item) => total + item.price, 0);
+    this.subtotal = this.subtotal - this.discount;
+    
+    return this.total = this.subtotal;
   }
 
   async presentToast(message: string, color: string = 'primary') {
@@ -106,4 +120,23 @@ export class CartPage implements OnInit {
     this.closeModal();
   }
 
+  searchCupon(){
+    if (this.inputCode.trim() === "") {
+      // Si el campo está vacío, mostrar mensaje de error
+      this.couponErrorMessage = "";
+      this.discount = 0;
+      return;
+    }
+
+    const cupon = this.cuponService.getCuponss().find((cupon) => cupon.code === this.inputCode);
+    
+    if (cupon) {
+      this.couponErrorMessage = ""; // Si el cupón es válido, limpiar el mensaje de error
+      this.discount = cupon.value;
+      console.log('Cupón válido:', cupon);
+    } else {
+      this.couponErrorMessage = "Código incorrecto"; // Si el cupón no es válido, mostrar el mensaje
+      this.discount = 0;
+    }
+  }
 }
