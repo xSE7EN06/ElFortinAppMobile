@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <div class="titleContaint">
+      <ion-buttons slot="start">
+        <ion-back-button default-href="#"></ion-back-button>
+        <ion-title><strong>Mis pedidos</strong>
+        </ion-title>
+      </ion-buttons>
+    </div>
+    <ion-segment value="orderInited">
+      <ion-segment-button value="orderInited"  content-id="first">
+        <p>Activos</p>
+      </ion-segment-button>
+      <ion-segment-button value="orderCompleted"  content-id="second">
+        <p>Completados</p>
+      </ion-segment-button>
+      <ion-segment-button value="orderCanceled" content-id="third">
+        <p>Cancelados</p>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-segment-view>
+  <ion-segment-content id="first">
+    <ion-list>
+      <ion-card lines="none" *ngFor="let order of ordersInProgress">
+        <ion-icon name="alert-circle" size="large" color="warning"></ion-icon>
+        <ion-card-header>
+          <p style="text-align: center;">
+          <strong>
+            El Fortin Panaderia
+          </strong>
+        </p>
+        </ion-card-header>
+        <ion-card-content>
+          <p><strong>Fecha: </strong>{{ order.order_date | date: 'short' }}</p>
+          <p><strong>Método de pago: </strong>{{ order.payment_method_id }}</p>
+          <p><strong>Total con impuestos: </strong>${{ order.post_tax_total }}</p>
+          <strong><p>Estado: {{ order.status_id }}</p></strong>
+        <div class="buttonOption">
+          <ion-button expand="block" mode="ios" class="btnOption" slot="end" shape="outline">
+            Cancelar pedido
+          </ion-button>
+        </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+    </ion-segment-content>
+    <ion-segment-content id="second">
+      <ion-list>
+        <ion-card lines="none" *ngFor="let order of ordersCompleted">
+          <ion-icon name="checkmark-circle" class="checkmark" size="large"></ion-icon>
+          <ion-card-header>
+            <p style="text-align: center;">
+            <strong>
+              El Fortin Panaderia
+            </strong>
+          </p>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Fecha: </strong>{{ order.order_date | date: 'short' }}</p>
+            <p><strong>Método de pago: </strong>{{ order.payment_method_id }}</p>
+            <p><strong>Total con impuestos: </strong>${{ order.post_tax_total }}</p>
+            <strong><p>Estado: {{ order.status_id }}</p></strong>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </ion-segment-content>
+    <ion-segment-content id="third">
+      <ion-list>
+        <ion-card lines="none" *ngFor="let order of ordersCompleted">
+          <ion-icon name="close-circle" color="danger" size="large"></ion-icon>
+          <ion-card-header>
+            <p style="text-align: center;">
+            <strong>
+              El Fortin Panaderia
+            </strong>
+          </p>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Fecha: </strong>{{ order.order_date | date: 'short' }}</p>
+            <p><strong>Método de pago: </strong>{{ order.payment_method_id }}</p>
+            <p><strong>Total con impuestos: </strong>${{ order.post_tax_total }}</p>
+            <strong><p>Estado: {{ order.status_id }}</p></strong>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </ion-segment-content>
+  </ion-segment-view>
+</ion-content>
