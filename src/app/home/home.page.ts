@@ -7,6 +7,7 @@ import { Producto } from '../interfaces/productos.interface';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { UsuarioService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { Usuario } from '../interfaces/usuarios.interface';
 
 @Component({
   selector: 'app-home',
@@ -24,10 +25,14 @@ export class HomePage implements OnInit {
   titleDrink = "Bebidas";
   titleBread = "Panaderia";
 
+  fabOpen = false;
+
   //variabel para almacenar el id del token
   userId: number | null = null;
 
   productosFiltrados: Producto[] = [...this.productos];
+
+  public usuario?: Usuario;
 
   images: string[] = [
     '../../assets/images/promocion3.jpg',
@@ -40,9 +45,21 @@ export class HomePage implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
+
+    userForm = new FormGroup({
+      names: new FormControl('', [Validators.required]),
+      last_names: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required])
+    })
   
 
-  constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router) { 
+    get currentUsuer(): Usuario{
+      const user = this.userForm.value as Usuario;
+      return user;
+    }
+
+  constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router, private userService: UsuarioService) { 
     setInterval(() => {
       this.nextSlide();
     }, 3000); // Cambia de imagen cada 3 segundos
@@ -51,6 +68,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.loadProductos();
     //this.loadFavorites();
+    this.loadUser();
   }
 
   //cramos una funcion para manejar los errores de login.page.html
@@ -79,6 +97,7 @@ export class HomePage implements OnInit {
 
     return await modal.present();
   }
+
 
   nextSlide() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
@@ -137,5 +156,20 @@ export class HomePage implements OnInit {
   goToDetail(product: any){
     this.productService.setProduct(product);
     this.router.navigate(['/product-detail']);
+  }
+
+  //Cunsumir api para ver la cuenta que inicio sesion.
+  loadUser(){
+    const id_user = this.userService.getUserIdFormToken();
+    this.userService.getUserById(id_user).subscribe((user) => {
+      if(user){
+        this.profileImage = user.image_url;
+      }
+    });
+  }
+
+   // Método para alternar la visibilidad del menú FAB
+   toggleFab() {
+    this.fabOpen = !this.fabOpen;
   }
 }

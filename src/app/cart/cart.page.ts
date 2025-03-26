@@ -18,6 +18,7 @@ export class CartPage implements OnInit {
   itemToRemove: Producto | null = null;
   inputCode: string = "";
   couponErrorMessage: string = "";
+  input: boolean = true;
 
   //variables para la logica de compra
   subtotal: number = 0;

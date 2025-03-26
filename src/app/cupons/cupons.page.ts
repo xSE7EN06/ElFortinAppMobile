@@ -5,6 +5,7 @@ import { Usuario } from '../interfaces/usuarios.interface';
 import { UsuarioService } from '../services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { Clipboard } from '@capacitor/clipboard';
+import { ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class CuponsPage implements OnInit {
   usuario: Usuario | null = null;
   cupon : Cupon | null = null;
   
-  constructor(private cuponsService: CuponsService, private usuarioService: UsuarioService) { }
+  constructor(private cuponsService: CuponsService, private usuarioService: UsuarioService, private toastController: ToastController) { }
 
   ngOnInit() {
     this.loadCupons();
@@ -56,11 +57,26 @@ export class CuponsPage implements OnInit {
     return firstValueFrom(this.usuarioService.getUserById(id));
   }
 
+  async presentToast(message: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color,
+      icon: "copy"
+    });
+    toast.present();
+  }
+
+
 
   //funcion para copiar el texto o el codigo de la promoción
   async copyToClipPromo(code: string){
     await Clipboard.write({
       string: code
     });
+
+    if(code != ""){
+      this.presentToast("¡Texto Copiado!");
+    }
   }
 }
