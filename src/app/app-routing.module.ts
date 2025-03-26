@@ -35,6 +35,14 @@ const routes: Routes = [
     path: 'no-internet',
     loadChildren: () => import('./no-internet/no-internet.module').then( m => m.NoInternetPageModule)
   },
+  {
+    path: 'cupons',
+    loadChildren: () => import('./cupons/cupons.module').then( m => m.CuponsPageModule)
+  },
+  {
+    path: 'orders',
+    loadChildren: () => import('./orders/orders.module').then( m => m.OrdersPageModule)
+  },
 
 ];
 

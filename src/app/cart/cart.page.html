@@ -1,7 +1,10 @@
-<app-header title="Mi Carrito" [mostrarBtnModal]="false"></app-header>
+<app-header title="Mi Carrito" [mostrarBtnModal]="false" [showLogout]="false"></app-header>
 <ion-content>
+  <ion-note color="primary" routerLink="/orders">
+    <strong>Ver ordenes</strong>
+  </ion-note>
   <ng-container *ngIf="cart.length > 0; else emptyCart">
-    <app-item-option [cartProdut]="cart"></app-item-option>
+    <app-item-option [cartProdut]="cart" (confirmRemove)="openConfirmModal($event)"></app-item-option>
   </ng-container>
 
   <ng-template #emptyCart>
@@ -10,29 +13,63 @@
       <p> <strong>¡El carrito esta vacio!</strong> </p>
     </div>
   </ng-template>
+
+
+  <ion-modal
+  [isOpen]="isModalOpen"
+  [initialBreakpoint]="0.45"
+  [breakpoints]="[0, 0.45, 0]"
+  handleBehavior="cycle">
+  <ng-template>
+    <ion-content class="ion-padding">
+      <div class="modal-container">
+        <ion-list>
+          <ion-item>
+            <ion-label class="textHeaderModal"> <strong>¿Remover del carrito?</strong> </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <app-item-product *ngIf="itemToRemove" [producto]="itemToRemove" [iconCart]="false" [iconFavorite]="false"></app-item-product>
+        <br>
+
+        <div class="modal-actions">
+          <ion-row>
+            <ion-col class="ion-text-left">
+              <ion-button expand="block" color="success" (click)="closeModal()" mode="ios" class="noRemove">Cancelar</ion-button>
+            </ion-col>
+            <ion-col class="ion-text-right">
+              <ion-button expand="block" color="primary" (click)="removeFromCart()" mode="ios">Sí, Remover</ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
 </ion-content>
 
 <!-- Sección fija del total y checkout -->
 <ion-footer class="checkout-footer">
   <div class="promo-section">
     <ion-chip  class="promo-chip">
-      <ion-input label="Código:" placeholder="FHSGZWEYRED3"></ion-input>
-      <ion-button mode="ios" class="buttonPromotion">Ver códigos</ion-button>
+      <ion-input label="Código:" placeholder="FHSGZWEYRED3" [(ngModel)]="inputCode" (ngModelChange)="searchCupon()"></ion-input>
+      <ion-button mode="ios" class="buttonPromotion" routerLink="/cupons">Ver códigos</ion-button>
     </ion-chip>
   </div>
+  <p *ngIf="couponErrorMessage" style="color: red; font-size: 14px;">{{ couponErrorMessage }}</p>
 
   <ion-list>
     <ion-item lines="none" class="custom-item">
       <ion-label>Subtotal</ion-label>
-      <ion-note class="custom-note" slot="end"><strong>$92.00</strong></ion-note>
+      <ion-note class="custom-note" slot="end"><strong>{{subtotal}}</strong></ion-note>
     </ion-item>
     <ion-item class="custom-item">
       <ion-label>Descuento</ion-label>
-      <ion-note class="custom-note discount" slot="end"><strong>-$92.00</strong></ion-note>
+      <ion-note class="custom-note discount" slot="end"><strong>-{{discount}}</strong></ion-note>
     </ion-item>
     <ion-item lines="none" class="custom-item">
       <ion-label>Costo Total</ion-label>
-      <ion-note class="custom-note total" slot="end"><strong>$92.00</strong></ion-note>
+      <ion-note class="custom-note total" slot="end"><strong>{{total}}</strong></ion-note>
     </ion-item>
   </ion-list>
 
