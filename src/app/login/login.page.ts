@@ -17,7 +17,10 @@ export class LoginPage implements OnInit {
 
   @ViewChild(HeaderComponent) headerComponent: HeaderComponent | undefined;
   form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^(?!.*[_.-]{2})(?![_.-])[a-zA-Z0-9._%+-]+(?<![_.-])@(gmail|outlook|hotmail|example)\.com$/)
+    ]),
     password: new FormControl('', [Validators.required])
   })
 
@@ -50,7 +53,7 @@ export class LoginPage implements OnInit {
       return 'Este campo es obligatorio.';
     }
   
-    if (control?.hasError('email')) {
+    if (control?.hasError('pattern')) {
       return 'Ingresa un correo electrónico válido.';
     }
     return ''; // Si no hay errores, retorna un string vacío

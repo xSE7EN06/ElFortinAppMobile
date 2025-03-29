@@ -1,4 +1,4 @@
-<ion-item lines="full" lines="none" button (click)="onProductClick()">
+<ion-item lines="full" lines="none" button (click)="onProductClick($event)">
   <ion-thumbnail slot="start">
     <img [src]="producto.image_url" loading="lazy"/>
   </ion-thumbnail>

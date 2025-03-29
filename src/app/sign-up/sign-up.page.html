@@ -2,32 +2,66 @@
 <ion-content>
   <app-logo imagen="../../../assets/icon/logop.png"></app-logo>
 
-  <form [formGroup]="form">
+  <form [formGroup]="form"  (ngSubmit)="onSubmit()">
 
     <app-custom-input
-    autocomplete="email"
-    icon="mail"
-    [control]="form.controls.email"
-    type="email"
-    label="Correo"
-    [errorText]="getErrorMessage('email')"
-    ></app-custom-input>
+      icon="person"
+      [control]="form.controls.nombre"
+      type="text"
+      label="Nombre(s)"
+      [errorText]="getErrorMessage('nombre')">
+    </app-custom-input>
 
     <app-custom-input
-    icon="eye"
-    [control]="form.controls.password"
-    type="password"
-    label="Contraseña"
-    [errorText]="getErrorMessage('password')"
-    ></app-custom-input>
+      icon="person"
+      [control]="form.controls.apellido_paterno"
+      type="text"
+      label="Apellido paterno"
+      [errorText]="getErrorMessage('apellido_paterno')">
+    </app-custom-input>
 
     <app-custom-input
-    icon="eye"
-    [control]="form.controls.password"
-    type="password"
-    label="Confirmar contraseña"
-    [errorText]="getErrorMessage('password')"
-    ></app-custom-input>
+      icon="person"
+      [control]="form.controls.apellido_materno"
+      type="text"
+      label="Apellido materno"
+      [errorText]="getErrorMessage('apellido_materno')">
+    </app-custom-input>
+
+    <app-custom-input
+      icon="call"
+      [control]="form.controls.telefono"
+      type="tel"
+      label="Teléfono"
+      [errorText]="getErrorMessage('telefono')">
+    </app-custom-input>
+
+    <app-custom-input
+      autocomplete="email"
+      icon="mail"
+      [control]="form.controls.email"
+      type="email"
+      label="Correo electrónico"
+      [errorText]="getErrorMessage('email')">
+    </app-custom-input>
+
+    <app-custom-input
+      [eyeToggle]="true"
+      [control]="form.controls.password"
+      type="password"
+      label="Contraseña"
+      [iconInput]="false"
+      [errorText]="getErrorMessage('password')">
+    </app-custom-input>
+
+    <app-custom-input
+      [eyeToggle]="true"
+      [control]="form.controls.confirmPassword"
+      type="password"
+      [iconInput]="false"
+      label="Confirmar contraseña"
+      [errorText]="getErrorMessage('confirmPassword')">
+    </app-custom-input>
 
     <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
         Crear
