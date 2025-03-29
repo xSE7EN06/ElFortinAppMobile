@@ -51,7 +51,7 @@ export class HomePage implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.tabs.select('home'); 
+      this.tabs.select('home');
     });
   }
 
@@ -83,9 +83,15 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadProductos();
-    //this.loadFavorites();
-    this.loadUser();
+    const token = localStorage.getItem('token');
+
+  if (!token) {
+    this.router.navigate(['/login']);
+    return; // Evita seguir ejecutando loadUser() sin sesión
+  }
+
+  this.loadProductos();
+  this.loadUser();
   }
 
   getErrorMessage(controlName: string): string {
@@ -181,6 +187,11 @@ export class HomePage implements OnInit {
   //Cunsumir api para ver la cuenta que inicio sesion.
   loadUser() {
     const id_user = this.userService.getUserIdFormToken();
+
+  if (!id_user) {
+    return;
+  }
+
     this.userService.getUserById(id_user).subscribe((user) => {
       if (user) {
         this.usuario = user;
@@ -249,12 +260,13 @@ export class HomePage implements OnInit {
     const { names, apellido_paterno, apellido_materno, email, password, telefono } = this.userForm.value;
   
     const nombreCompleto = `${names} ${apellido_paterno} ${apellido_materno}`;
+    
   
     const usuarioActualizado = {
       name: nombreCompleto,
       email,
       phone: telefono,
-      encrypted_password: password,
+      password,
       image_url: this.profileImage !== '../../assets/icon/avtar.png' ? this.profileImage : null
     };
   
@@ -287,5 +299,6 @@ export class HomePage implements OnInit {
     this.usuario = undefined;
     this.profileImage = '../../assets/icon/avtar.png';
     this.userForm.reset();
+    this.router.navigate(['/login']);
   }
 }

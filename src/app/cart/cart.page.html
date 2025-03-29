@@ -70,5 +70,6 @@
     </ion-item>
   </ion-list>
 
-  <ion-button expand="block" (click)="checkout()" mode="ios" [disabled]="cart.length === 0">Proceder al pago</ion-button>
+  <ion-button expand="block" mode="ios" [disabled]="cart.length === 0"  (click)="iniciarPagoPayPal()"  >Proceder al pago</ion-button>
+  <div *ngIf="mostrarPayPal" id="paypal-button-container" class="ion-padding"></div>
 </ion-footer>
