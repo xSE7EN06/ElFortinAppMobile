@@ -62,4 +62,8 @@ export class UsuarioService {
           })
         );
     }
+
+    updateUser(id: number, data: any): Observable<any> {
+        return this.http.put(`${this.baseUrl}/usuarios/${id}`, data);
+    }
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ProductService} from '../services/product.service';
+import { ProductService } from '../services/product.service';
 import { ModalComponent } from '../components/modal/modal.component';
-import { ModalController, ToastController } from '@ionic/angular';
+import { IonTabs, ModalController, ToastController } from '@ionic/angular';
 import { Producto } from '../interfaces/productos.interface';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { UsuarioService } from '../services/user.service';
@@ -16,6 +16,9 @@ import { Usuario } from '../interfaces/usuarios.interface';
   standalone: false
 })
 export class HomePage implements OnInit {
+
+  @ViewChild(IonTabs) tabs!: IonTabs;
+
   productos: Producto[] = [];
   favoritos: Producto[] = [];
   carrito: Producto[] = [];
@@ -41,25 +44,39 @@ export class HomePage implements OnInit {
   ];
   currentIndex = 0;
 
-   form = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required])
-    })
+  form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required])
+  })
 
-    userForm = new FormGroup({
-      names: new FormControl('', [Validators.required]),
-      last_names: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required])
-    })
-  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.tabs.select('home'); // 👈 Esto selecciona la pestaña "home"
+    });
+  }
 
-    get currentUsuer(): Usuario{
-      const user = this.userForm.value as Usuario;
-      return user;
-    }
+  ionViewDidEnter() {
+    this.tabs.select('home');
+  }
 
-  constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router, private userService: UsuarioService) { 
+  userForm = new FormGroup({
+    names: new FormControl('', [Validators.required]),
+    apellido_paterno: new FormControl('', [Validators.required]),
+    apellido_materno: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+    telefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
+  })
+
+
+  get currentUsuer(): Usuario {
+    const user = this.userForm.value as Usuario;
+    return user;
+  }
+
+  constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router, private userService: UsuarioService,
+     private toastContoller: ToastController
+  ) {
     setInterval(() => {
       this.nextSlide();
     }, 3000); // Cambia de imagen cada 3 segundos
@@ -71,19 +88,22 @@ export class HomePage implements OnInit {
     this.loadUser();
   }
 
-  //cramos una funcion para manejar los errores de login.page.html
   getErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
+    const control = this.userForm.get(controlName);
   
-    //validamos y retornamos
     if (control?.hasError('required')) {
       return 'Este campo es obligatorio.';
     }
   
-    if (control?.hasError('email')) {
+    if (controlName === 'email' && control?.hasError('email')) {
       return 'Ingresa un correo electrónico válido.';
     }
-    return ''; // Si no hay errores, retorna un string vacío
+  
+    if (controlName === 'telefono' && control?.hasError('pattern')) {
+      return 'Debe ser un número de 10 dígitos.';
+    }
+  
+    return '';
   }
 
   async openModal(title: string, productos: Producto[]) {
@@ -119,7 +139,7 @@ export class HomePage implements OnInit {
   }
 
 
-  async takePhoto(){
+  async takePhoto() {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
@@ -127,9 +147,9 @@ export class HomePage implements OnInit {
         resultType: CameraResultType.Base64,
         source: CameraSource.Prompt,
       });
-  
+
       console.log('Base64 Image:', image.base64String); // 👀 Verifica la salida en la consola
-  
+
       if (image.base64String) {
         this.profileImage = `data:image/jpeg;base64,${image.base64String}`;
       }
@@ -141,35 +161,131 @@ export class HomePage implements OnInit {
 
 
   //funcion para buscar productos con el search-bar
-  searchProduct(event: any){
+  searchProduct(event: any) {
     const texto = event.target.value.toLowerCase().trim();
 
-  if (texto === '') {
-    this.productosFiltrados = [...this.productos]; 
-  } else {
-    this.productosFiltrados = this.productos.filter((producto) =>
-      producto.name.toLowerCase().includes(texto)
-    );
-  }
+    if (texto === '') {
+      this.productosFiltrados = [...this.productos];
+    } else {
+      this.productosFiltrados = this.productos.filter((producto) =>
+        producto.name.toLowerCase().includes(texto)
+      );
+    }
   }
 
-  goToDetail(product: any){
+  goToDetail(product: any) {
     this.productService.setProduct(product);
     this.router.navigate(['/product-detail']);
   }
 
   //Cunsumir api para ver la cuenta que inicio sesion.
-  loadUser(){
+  loadUser() {
     const id_user = this.userService.getUserIdFormToken();
     this.userService.getUserById(id_user).subscribe((user) => {
-      if(user){
-        this.profileImage = user.image_url;
+      if (user) {
+        this.usuario = user;
+
+        const { nombres, apellidoPaterno, apellidoMaterno } = this.separarNombreCompleto(user.name);
+
+        this.userForm.reset();
+        this.userForm.patchValue({
+          names: nombres,
+          apellido_paterno: apellidoPaterno,
+          apellido_materno: apellidoMaterno,
+          email: user.email,
+          password: '',
+          telefono: user.phone ? user.phone.toString() : ''
+        });
+
+        this.profileImage = user.image_url?.trim()
+          ? user.image_url
+          : '../../assets/icon/avtar.png';
+      } else {
+        this.profileImage = '../../assets/icon/avtar.png';
       }
     });
   }
 
-   // Método para alternar la visibilidad del menú FAB
-   toggleFab() {
+  // Método para alternar la visibilidad del menú FAB
+  toggleFab() {
     this.fabOpen = !this.fabOpen;
+  }
+
+  separarNombreCompleto(nombreCompleto: string): {
+    nombres: string;
+    apellidoPaterno: string;
+    apellidoMaterno: string;
+  } {
+    const partes = nombreCompleto.trim().split(' ');
+
+    if (partes.length < 3) {
+      return {
+        nombres: partes.slice(0, 1).join(' '),
+        apellidoPaterno: partes[1] || '',
+        apellidoMaterno: ''
+      };
+    }
+
+    return {
+      nombres: partes.slice(0, partes.length - 2).join(' '),
+      apellidoPaterno: partes[partes.length - 2],
+      apellidoMaterno: partes[partes.length - 1]
+    };
+  }
+
+  async guardarCambios() {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      return;
+    }
+  
+    const loading = await this.toastContoller.create({
+      message: 'Guardando cambios...',
+      duration: 1000,
+      color: 'primary'
+    });
+    await loading.present();
+  
+    const { names, apellido_paterno, apellido_materno, email, password, telefono } = this.userForm.value;
+  
+    const nombreCompleto = `${names} ${apellido_paterno} ${apellido_materno}`;
+  
+    const usuarioActualizado = {
+      name: nombreCompleto,
+      email,
+      phone: telefono,
+      encrypted_password: password, // o déjalo en blanco si no se quiere cambiar
+      image_url: this.profileImage !== '../../assets/icon/avtar.png' ? this.profileImage : null
+    };
+  
+    const userId = this.userService.getUserIdFormToken();
+    if (!userId) return;
+  
+    this.userService.updateUser(userId, usuarioActualizado).subscribe({
+      next: async () => {
+        const alert = await this.toastContoller.create({
+          message: 'Cambios guardados correctamente',
+          duration: 1500,
+          color: 'success',
+          position: 'bottom'
+        });
+        alert.present();
+      },
+      error: async () => {
+        const alert = await this.toastContoller.create({
+          message: 'Ocurrió un error al guardar',
+          duration: 1500,
+          color: 'danger',
+          position: 'bottom'
+        });
+        alert.present();
+      }
+    });
+  }
+
+  resetUserData() {
+    this.usuario = undefined;
+    this.profileImage = '../../assets/icon/avtar.png';
+    this.userForm.reset();
   }
 }
