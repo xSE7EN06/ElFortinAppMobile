@@ -76,6 +76,7 @@ export class CartPage implements OnInit {
             this.total = 0;
             this.subtotal = 0;
             this.discount = 0;
+            this.createOrder();
           }
         }
       ]
@@ -93,6 +94,10 @@ export class CartPage implements OnInit {
     this.subtotal = this.subtotal - this.discount;
     this.total = this.subtotal - this.discount;
     return this.total;
+  }
+
+  createOrder(){
+
   }
 
   async presentToast(message: string, color: string = 'primary') {
