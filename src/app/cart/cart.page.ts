@@ -34,12 +34,22 @@ export class CartPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.productService.cantidades$.subscribe(() => {
+      this.getTotal();
+    });
     this.loadCart();
   }
 
   loadCart(): void{
     this.productService.getProductsCart().subscribe((productos) => {
       this.cart = productos; // Load products into cart
+
+      if(this.cart.length === 0){
+        this.inputCode = "";
+        this.discount = 0;
+        this.couponErrorMessage = '';
+      }
+      this.getTotal();
     });
   }
 
@@ -63,6 +73,9 @@ export class CartPage implements OnInit {
             this.generatePDF(); // Call the generate PDF function before clearing the cart
             this.cart = []; // Clear cart after purchase
             this.presentToast('Compra realizada con éxito.', 'success');
+            this.total = 0;
+            this.subtotal = 0;
+            this.discount = 0;
           }
         }
       ]
@@ -72,10 +85,14 @@ export class CartPage implements OnInit {
   }
 
   getTotal(): number {
-    this.subtotal = this.cart.reduce((total, item) => total + item.price, 0);
+    this.subtotal = this.cart.reduce((total, item) => {
+      const cantidad = this.productService.getCantidad(item.id);
+      return total + (item.price * cantidad);
+    }, 0);
+  
     this.subtotal = this.subtotal - this.discount;
-    
-    return this.total = this.subtotal;
+    this.total = this.subtotal - this.discount;
+    return this.total;
   }
 
   async presentToast(message: string, color: string = 'primary') {

@@ -1,8 +1,5 @@
 <app-header title="Mi Carrito" [mostrarBtnModal]="false" [showLogout]="false"></app-header>
 <ion-content>
-  <ion-note color="primary" routerLink="/orders">
-    <strong>Ver ordenes</strong>
-  </ion-note>
   <ng-container *ngIf="cart.length > 0; else emptyCart">
     <app-item-option [cartProdut]="cart" (confirmRemove)="openConfirmModal($event)"></app-item-option>
   </ng-container>
@@ -52,8 +49,8 @@
 <ion-footer class="checkout-footer">
   <div class="promo-section">
     <ion-chip  class="promo-chip">
-      <ion-input label="Código:" placeholder="FHSGZWEYRED3" [(ngModel)]="inputCode" (ngModelChange)="searchCupon()"></ion-input>
-      <ion-button mode="ios" class="buttonPromotion" routerLink="/cupons">Ver códigos</ion-button>
+      <ion-input label="Código:" placeholder="FHSGZWEYRED3" [(ngModel)]="inputCode" (ngModelChange)="searchCupon()" [disabled]="cart.length === 0"></ion-input>
+      <ion-button mode="ios" class="buttonPromotion" routerLink="/cupons" [disabled]="cart.length === 0">Ver códigos</ion-button>
     </ion-chip>
   </div>
   <p *ngIf="couponErrorMessage" style="color: red; font-size: 14px;">{{ couponErrorMessage }}</p>
@@ -73,5 +70,5 @@
     </ion-item>
   </ion-list>
 
-  <ion-button expand="block" (click)="checkout()" mode="ios">Proceder al pago</ion-button>
+  <ion-button expand="block" (click)="checkout()" mode="ios" [disabled]="cart.length === 0">Proceder al pago</ion-button>
 </ion-footer>
