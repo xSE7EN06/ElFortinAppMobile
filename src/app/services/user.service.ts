@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.prod';
 import { HttpClient } from "@angular/common/http";
 import { Observable, of, tap } from "rxjs";
 import { jwtDecode } from "jwt-decode";
+import { ProductService } from "./product.service";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class UsuarioService {
 
     private baseUrl: string = environment.baseUrl;
 
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient, private productService: ProductService){}
 
     login(email: string, password: string): Observable<any> {
         return this.http.post<any>(`${this.baseUrl}/login`, {
@@ -22,6 +23,10 @@ export class UsuarioService {
             tap(response => {
                 if(response.token){
                     localStorage.setItem('token', response.token);
+                    const idUser = this.getUserIdFormToken();
+                    if(idUser){
+                        this.productService.setUserId(idUser);
+                    }
                 }
             })
         );
