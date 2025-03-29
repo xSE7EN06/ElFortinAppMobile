@@ -51,7 +51,7 @@ export class HomePage implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.tabs.select('home'); // 👈 Esto selecciona la pestaña "home"
+      this.tabs.select('home'); 
     });
   }
 
@@ -148,7 +148,7 @@ export class HomePage implements OnInit {
         source: CameraSource.Prompt,
       });
 
-      console.log('Base64 Image:', image.base64String); // 👀 Verifica la salida en la consola
+      console.log('Base64 Image:', image.base64String); 
 
       if (image.base64String) {
         this.profileImage = `data:image/jpeg;base64,${image.base64String}`;
@@ -254,7 +254,7 @@ export class HomePage implements OnInit {
       name: nombreCompleto,
       email,
       phone: telefono,
-      encrypted_password: password, // o déjalo en blanco si no se quiere cambiar
+      encrypted_password: password,
       image_url: this.profileImage !== '../../assets/icon/avtar.png' ? this.profileImage : null
     };
   
