@@ -8,6 +8,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { UsuarioService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuarios.interface';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -75,7 +76,7 @@ export class HomePage implements OnInit {
   }
 
   constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router, private userService: UsuarioService,
-     private toastContoller: ToastController
+     private toastContoller: ToastController, private loadingCtrl: LoadingController
   ) {
     setInterval(() => {
       this.nextSlide();
@@ -250,10 +251,10 @@ export class HomePage implements OnInit {
       return;
     }
   
-    const loading = await this.toastContoller.create({
+    const loading = await this.loadingCtrl.create({
       message: 'Guardando cambios...',
-      duration: 1000,
-      color: 'primary'
+      spinner: 'circles',
+      duration: 1000
     });
     await loading.present();
   
@@ -267,6 +268,8 @@ export class HomePage implements OnInit {
       email,
       phone: telefono,
       password,
+      nickname: this.usuario?.nickname,
+      user_type: 'client',
       image_url: this.profileImage !== '../../assets/icon/avtar.png' ? this.profileImage : null
     };
   
