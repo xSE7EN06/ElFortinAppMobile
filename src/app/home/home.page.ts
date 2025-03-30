@@ -8,6 +8,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { UsuarioService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuarios.interface';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -51,7 +52,7 @@ export class HomePage implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.tabs.select('home'); 
+      this.tabs.select('home');
     });
   }
 
@@ -75,7 +76,7 @@ export class HomePage implements OnInit {
   }
 
   constructor(private productService: ProductService, private modalCtrl: ModalController, private router: Router, private userService: UsuarioService,
-     private toastContoller: ToastController
+     private toastContoller: ToastController, private loadingCtrl: LoadingController
   ) {
     setInterval(() => {
       this.nextSlide();
@@ -83,9 +84,15 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadProductos();
-    //this.loadFavorites();
-    this.loadUser();
+    const token = localStorage.getItem('token');
+
+  if (!token) {
+    this.router.navigate(['/login']);
+    return; // Evita seguir ejecutando loadUser() sin sesión
+  }
+
+  this.loadProductos();
+  this.loadUser();
   }
 
   getErrorMessage(controlName: string): string {
@@ -181,6 +188,11 @@ export class HomePage implements OnInit {
   //Cunsumir api para ver la cuenta que inicio sesion.
   loadUser() {
     const id_user = this.userService.getUserIdFormToken();
+
+  if (!id_user) {
+    return;
+  }
+
     this.userService.getUserById(id_user).subscribe((user) => {
       if (user) {
         this.usuario = user;
@@ -239,22 +251,25 @@ export class HomePage implements OnInit {
       return;
     }
   
-    const loading = await this.toastContoller.create({
+    const loading = await this.loadingCtrl.create({
       message: 'Guardando cambios...',
-      duration: 1000,
-      color: 'primary'
+      spinner: 'circles',
+      duration: 1000
     });
     await loading.present();
   
     const { names, apellido_paterno, apellido_materno, email, password, telefono } = this.userForm.value;
   
     const nombreCompleto = `${names} ${apellido_paterno} ${apellido_materno}`;
+    
   
     const usuarioActualizado = {
       name: nombreCompleto,
       email,
       phone: telefono,
-      encrypted_password: password,
+      password,
+      nickname: this.usuario?.nickname,
+      user_type: 'client',
       image_url: this.profileImage !== '../../assets/icon/avtar.png' ? this.profileImage : null
     };
   
@@ -287,5 +302,6 @@ export class HomePage implements OnInit {
     this.usuario = undefined;
     this.profileImage = '../../assets/icon/avtar.png';
     this.userForm.reset();
+    this.router.navigate(['/login']);
   }
 }

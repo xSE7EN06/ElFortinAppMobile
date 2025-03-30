@@ -211,4 +211,11 @@ export class ProductService {
     });
     localStorage.setItem(`cantidades_${this.userId}`, JSON.stringify(obj));
   }
+
+  clearCart() {
+    this.carrito = [];
+    this.carritoSubject.next([]);
+    localStorage.removeItem(`carrito_${this.userId}`);
+    localStorage.removeItem(`cantidades_${this.userId}`);
+  }
 }
