@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, of, tap } from "rxjs";
 import { jwtDecode } from "jwt-decode";
 import { ProductService } from "./product.service";
+import { UsuarioRegistro } from "../sign-up/sign-up.page";
 
 @Injectable({
     providedIn: 'root'
@@ -52,5 +53,17 @@ export class UsuarioService {
     getUserById(id: number | null): Observable<Usuario | null>{
       if(id === null) return of(null);
       return this.http.get<Usuario>(`${this.baseUrl}/usuarios/${id}`);
+    }
+
+    register(usuario: UsuarioRegistro): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}/usuarios`, usuario).pipe(
+          tap(response => {
+            console.log('Usuario registrado:', response);
+          })
+        );
+    }
+
+    updateUser(id: number, userData: any): Observable<any> {
+        return this.http.put(`${this.baseUrl}/usuarios/${id}`, userData);
     }
 }

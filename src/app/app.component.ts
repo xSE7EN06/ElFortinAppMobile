@@ -15,7 +15,7 @@ export class AppComponent {
 
   constructor(private platform: Platform, private router: Router, private toastController: ToastController) {
     this.initializeApp();
-    this.checkNetwork();
+    //this.checkNetwork();
   }
 
   // Cada vez que se incia la app, se cargan estos valores
