@@ -94,13 +94,12 @@ export class CartPage implements OnInit {
       const cantidad = this.productService.getCantidad(item.id);
       return total + (item.price * cantidad);
     }, 0);
-  
-    this.total = this.subtotal - this.discount;
-    return this.total;
   }
 
   createOrder(){
-
+    this.subtotal = this.subtotal - this.discount;
+    this.total = this.subtotal - this.discount;
+    return this.total;
   }
 
   async presentToast(message: string, color: string = 'primary') {
