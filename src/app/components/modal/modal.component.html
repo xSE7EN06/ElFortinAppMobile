@@ -1,10 +1,10 @@
 <app-header [title]="title" [showLogout]="false" [mostrar]="false"></app-header>
 
 <ion-content>
-  <ion-searchbar placeholder="Search"></ion-searchbar>
+  <ion-searchbar placeholder="Search" clear-icon="trash-bin"  (ionInput)="searchProduct($event)"></ion-searchbar>
   <ion-list>
     <app-item-product 
-    *ngFor="let producto of productos" 
+    *ngFor="let producto of productosFiltrados" 
      [producto]="producto" (productSelected)="goToDetail($event)">
    </app-item-product>
   </ion-list>

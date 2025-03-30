@@ -15,7 +15,7 @@ export class ItemOptionComponent  implements OnInit {
   @Output() confirmRemove = new EventEmitter<Producto>();
   @Output() countMap = new Map<number, number>();
 
-  constructor(private alertController: AlertController, private productService: ProductService, private ngZone: NgZone) { }
+  constructor(private alertController: AlertController, public productService: ProductService, private ngZone: NgZone) { }
 
   ngOnInit() {
      // Inicializar los productos con cantidad 1 si no están en el mapa
@@ -28,23 +28,18 @@ export class ItemOptionComponent  implements OnInit {
 
   // Incrementar la cantidad del producto
   increment(item: Producto) {
-    this.ngZone.run(() => {
-      let currentCount = this.countMap.get(item.id) || 0;
-      this.countMap.set(item.id, currentCount + 1);
-    });
+    const current = this.productService.getCantidad(item.id);
+    this.productService.setCantidad(item.id, current + 1);
   }
 
  // Decrementar la cantidad del producto
  decrement(item: Producto) {
-  this.ngZone.run(() => {
-    let currentCount = this.countMap.get(item.id) || 1;
-
-    if (currentCount > 1) {
-      this.countMap.set(item.id, currentCount - 1);
-    } else {
-      this.requestRemove(item);
-    }
-  });
+  const current = this.productService.getCantidad(item.id);
+  if (current > 1) {
+    this.productService.setCantidad(item.id, current - 1);
+  } else {
+    this.requestRemove(item);
+  }
 }
 
 

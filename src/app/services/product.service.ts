@@ -29,9 +29,21 @@ export class ProductService {
   carrito$ = this.carritoSubject.asObservable();
   private selectedProduct: any;
 
+  private userId: number = 0;
+
+  private cantidades: Map<number, number> = new Map();
+  private cantidadesSubject = new BehaviorSubject<Map<number, number>>(this.cantidades);
+  cantidades$ = this.cantidadesSubject.asObservable();
+
 
   constructor(private http: HttpClient, private toastController: ToastController) {
     // Cargar favoritos desde localStorage
+    this.loadFavoritesFromStorage();
+    this.loadCartFromStorage();
+  }
+
+  setUserId(userId: number): void {
+    this.userId = userId;
     this.loadFavoritesFromStorage();
     this.loadCartFromStorage();
   }
@@ -46,7 +58,7 @@ export class ProductService {
     return this.favoritos$;
   }
 
-  getProductsCart(): Observable<Producto[]>{
+  getProductsCart(): Observable<Producto[]> {
     return this.carrito$;
   }
 
@@ -61,21 +73,21 @@ export class ProductService {
     if (index === -1) {
       if (producto) {
         this.toastController.create({
-          message:`¡${producto.name}, se agrego a favoritos!`,
+          message: `¡${producto.name}, se agrego a favoritos!`,
           duration: 1500,
           position: 'bottom',
-          icon:"add-circle-outline",
+          icon: "add-circle-outline",
           color: 'success',
         }).then(toast => toast.present());
-    
+
         this.favoritos.push(producto); // Agregar a favoritos
       }
     } else {
       this.toastController.create({
-        message:`¡${producto.name}, se elimino de favoritos!`,
+        message: `¡${producto.name}, se elimino de favoritos!`,
         duration: 1500,
         position: 'bottom',
-        icon:"close-circle-outline",
+        icon: "close-circle-outline",
         color: 'success',
       }).then(toast => toast.present());
       this.favoritos.splice(index, 1); // Quitar de favoritos
@@ -86,37 +98,42 @@ export class ProductService {
 
   // Cargar favoritos desde localStorage 
   private loadFavoritesFromStorage(): void {
-    const favoritosGuardados = localStorage.getItem('favoritos');
+    if (!this.userId) return;
+    const favoritosGuardados = localStorage.getItem(`favoritos_${this.userId}`);
     if (favoritosGuardados) {
       this.favoritos = JSON.parse(favoritosGuardados);
-      this.favoritosSubject.next(this.favoritos); // Emitir la lista cargada
+      this.favoritosSubject.next(this.favoritos);
+    } else {
+      this.favoritos = [];
+      this.favoritosSubject.next([]);
     }
   }
 
   // Guardar favoritos en localStorage 
   private saveFavoritesToStorage(): void {
-    localStorage.setItem('favoritos', JSON.stringify(this.favoritos));
+    if (!this.userId) return;
+    localStorage.setItem(`favoritos_${this.userId}`, JSON.stringify(this.favoritos));
   }
 
-  toggleCart(producto: Producto): void{
+  toggleCart(producto: Producto): void {
     const index = this.carrito.findIndex((p) => p.id === producto.id);
-    if (index === -1){
-      if(producto){
+    if (index === -1) {
+      if (producto) {
         this.toastController.create({
-          message:`¡${producto.name}, se agrego al carrito!`,
+          message: `¡${producto.name}, se agrego al carrito!`,
           duration: 1500,
           position: 'bottom',
-          icon:"cart",
+          icon: "cart",
           color: 'success',
         }).then(toast => toast.present());
         this.carrito.push(producto);
       }
-    }else{
+    } else {
       this.toastController.create({
-        message:`¡${producto.name}, se elimino del carrito!`,
+        message: `¡${producto.name}, se elimino del carrito!`,
         duration: 1500,
         position: 'bottom',
-        icon:"cart",
+        icon: "cart",
         color: 'success',
       }).then(toast => toast.present());
       this.carrito.splice(index, 1);
@@ -126,32 +143,79 @@ export class ProductService {
     this.saveCartToStorage();
   }
 
-  private loadCartFromStorage(): void{
-    const productosCarrito = localStorage.getItem('carrito');
-    if(productosCarrito){
+  private loadCartFromStorage(): void {
+    if (!this.userId) return;
+    const productosCarrito = localStorage.getItem(`carrito_${this.userId}`);
+    if (productosCarrito) {
       this.carrito = JSON.parse(productosCarrito);
       this.carritoSubject.next(this.carrito);
+    } else {
+      this.carrito = [];
+      this.carritoSubject.next([]);
     }
   }
 
-  private saveCartToStorage(): void{
-    localStorage.setItem('carrito', JSON.stringify(this.carrito));
+  private saveCartToStorage(): void {
+    if (!this.userId) return;
+    localStorage.setItem(`carrito_${this.userId}`, JSON.stringify(this.carrito));
   }
 
-  isProductCart(producto: Producto): boolean{
+  isProductCart(producto: Producto): boolean {
     return this.carrito.some((p) => p.id === producto.id);
   }
 
-   // Método para obtener un producto por su id
-   getProductById(id: number): Observable<Producto> {
+  // Método para obtener un producto por su id
+  getProductById(id: number): Observable<Producto> {
     return this.http.get<Producto>(`${this.baseUrl}/products/${id}`);
   }
 
-  setProduct(product: any){
+  setProduct(product: any) {
     this.selectedProduct = product;
   }
 
-  getProduct(){
+  getProduct() {
     return this.selectedProduct;
+  }
+
+  //CALCULAR PRECIOS DEL CARRITO 
+  getCantidad(productId: number): number {
+    return this.cantidades.get(productId) || 1;
+  }
+
+  setCantidad(productId: number, cantidad: number): void {
+    this.cantidades.set(productId, cantidad);
+    this.cantidadesSubject.next(this.cantidades);
+    this.saveCantidadesToStorage();
+  }
+
+  loadCantidadesFromStorage(): void {
+    const raw = localStorage.getItem(`cantidades_${this.userId}`);
+    if (raw) {
+      const obj = JSON.parse(raw);
+      this.cantidades = new Map<number, number>();
+
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        this.cantidades.set(Number(key), obj[key]);
+      }
+    }
+
+    this.cantidadesSubject.next(this.cantidades);
+    }
+  }
+
+  private saveCantidadesToStorage(): void {
+    const obj: { [key: number]: number } = {};
+    this.cantidades.forEach((value, key) => {
+      obj[key] = value;
+    });
+    localStorage.setItem(`cantidades_${this.userId}`, JSON.stringify(obj));
+  }
+
+  clearCart() {
+    this.carrito = [];
+    this.carritoSubject.next([]);
+    localStorage.removeItem(`carrito_${this.userId}`);
+    localStorage.removeItem(`cantidades_${this.userId}`);
   }
 }

@@ -5,6 +5,7 @@ import { jsPDF } from 'jspdf';
 import { Producto } from '../interfaces/productos.interface';
 import { CuponsService } from '../services/cupon/cupons.service';
 
+declare var paypal: any;
 
 @Component({
   selector: 'app-cart',
@@ -12,6 +13,8 @@ import { CuponsService } from '../services/cupon/cupons.service';
   styleUrls: ['./cart.page.scss'],
   standalone: false
 })
+
+
 export class CartPage implements OnInit {
   cart: Producto[] = [];
   isModalOpen = false;
@@ -24,6 +27,7 @@ export class CartPage implements OnInit {
   subtotal: number = 0;
   total: number = 0;
   discount: number = 0;
+  mostrarPayPal: boolean = false;
 
 
   constructor(
@@ -34,12 +38,22 @@ export class CartPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.productService.cantidades$.subscribe(() => {
+      this.getTotal();
+    });
     this.loadCart();
   }
 
   loadCart(): void{
     this.productService.getProductsCart().subscribe((productos) => {
       this.cart = productos; // Load products into cart
+
+      if(this.cart.length === 0){
+        this.inputCode = "";
+        this.discount = 0;
+        this.couponErrorMessage = '';
+      }
+      this.getTotal();
     });
   }
 
@@ -63,6 +77,10 @@ export class CartPage implements OnInit {
             this.generatePDF(); // Call the generate PDF function before clearing the cart
             this.cart = []; // Clear cart after purchase
             this.presentToast('Compra realizada con éxito.', 'success');
+            this.total = 0;
+            this.subtotal = 0;
+            this.discount = 0;
+            this.createOrder();
           }
         }
       ]
@@ -72,10 +90,17 @@ export class CartPage implements OnInit {
   }
 
   getTotal(): number {
-    this.subtotal = this.cart.reduce((total, item) => total + item.price, 0);
-    this.subtotal = this.subtotal - this.discount;
-    
-    return this.total = this.subtotal;
+    this.subtotal = this.cart.reduce((total, item) => {
+      const cantidad = this.productService.getCantidad(item.id);
+      return total + (item.price * cantidad);
+    }, 0);
+  
+    this.total = this.subtotal - this.discount;
+    return this.total;
+  }
+
+  createOrder(){
+
   }
 
   async presentToast(message: string, color: string = 'primary') {
@@ -116,6 +141,7 @@ export class CartPage implements OnInit {
     if (this.itemToRemove) {
       await this.productService.toggleCart(this.itemToRemove);
       this.cart = this.cart.filter(p => p !== this.itemToRemove);
+      this.getTotal();
     }
     this.closeModal();
   }
@@ -138,5 +164,59 @@ export class CartPage implements OnInit {
       this.couponErrorMessage = "Código incorrecto"; // Si el cupón no es válido, mostrar el mensaje
       this.discount = 0;
     }
+    this.getTotal();
+  }
+
+  iniciarPagoPayPal() {
+    this.mostrarPayPal = true;
+  
+    setTimeout(() => {
+      paypal.Buttons({
+        createOrder: (data: any, actions: any) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: this.getTotal().toFixed(2),
+                currency_code: 'MXN'
+              }
+            }]
+          });
+        },
+        onApprove: async (data: any, actions: any) => {
+          const details = await actions.order.capture();
+          console.log('Pago exitoso:', details);
+  
+          // Generar PDF del ticket
+          this.generatePDF();
+  
+          // Vaciar carrito
+          this.cart = [];
+          this.productService.clearCart(); 
+  
+          // Mostrar mensaje
+          const alert = await this.alertController.create({
+            header: 'Pago exitoso',
+            message: `Gracias ${details.payer.name.given_name}, tu pago fue procesado correctamente.`,
+            buttons: ['OK']
+          });
+          await alert.present();
+  
+          this.mostrarPayPal = false;
+          this.total = 0;
+          this.subtotal = 0;
+          this.discount = 0;
+          this.createOrder(); 
+        },
+        onError: async (err: any) => {
+          console.error('Error con PayPal:', err);
+          const alert = await this.alertController.create({
+            header: 'Error en el pago',
+            message: 'Hubo un problema al procesar tu pago.',
+            buttons: ['OK']
+          });
+          await alert.present();
+        }
+      }).render('#paypal-button-container');
+    }, 0);
   }
 }

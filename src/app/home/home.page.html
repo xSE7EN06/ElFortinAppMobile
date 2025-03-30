@@ -5,151 +5,271 @@
       <ion-fab-button (click)="toggleFab()">
         <ion-icon name="cart"></ion-icon>
       </ion-fab-button>
-  
+
       <!-- Menú FAB, visible cuando `fabOpen` es true -->
       <ion-fab-list side="top" *ngIf="fabOpen">
-        <ion-fab-button>
+        <ion-fab-button color="primary">
           <ion-icon name="cart" routerLink="/cart"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button>
+        <ion-fab-button color="primary">
           <ion-icon name="clipboard" routerLink="/orders"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>
     </ion-fab>
 
     <ion-tab tab="home">
-        <app-header title="Inicio" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
-        <ion-content>
-         <ion-item lines="none">
-          <ion-searchbar placeholder="Buscar producto" clear-icon="trash-bin"  (ionInput)="searchProduct($event)"></ion-searchbar>  
-         </ion-item>
-          <ion-card class="cardPromotion">
-            <div class="carousel">
-              <div class="slides" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-                <div *ngFor="let image of images" class="slide">
-                  <img [src]="image" alt="Slide" loading="lazy">
-                </div>
+      <app-header
+        title="Inicio"
+        [mostrar]="false"
+        [mostrarBtnModal]="false"
+        (onLogout)="resetUserData()"
+      ></app-header>
+      <ion-content>
+        <ion-item lines="none">
+          <ion-searchbar
+            placeholder="Buscar producto"
+            clear-icon="trash-bin"
+            (ionInput)="searchProduct($event)"
+          ></ion-searchbar>
+        </ion-item>
+        <ion-card class="cardPromotion">
+          <div class="carousel">
+            <div
+              class="slides"
+              [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
+            >
+              <div *ngFor="let image of images" class="slide">
+                <img [src]="image" alt="Slide" loading="lazy" />
               </div>
             </div>
-          </ion-card>
+          </div>
+        </ion-card>
 
-          <ion-item lines="none">
-            <ion-label>
-              <h3><strong>Mejores Productos</strong></h3>
-            </ion-label>
-          </ion-item>
-          <app-item-product 
-           *ngFor="let producto of productosFiltrados" 
-            [producto]="producto" (productSelected)="goToDetail($event)">
-          </app-item-product>
-        </ion-content>
+        <ion-item lines="none">
+          <ion-label>
+            <h3><strong>Mejores Productos</strong></h3>
+          </ion-label>
+        </ion-item>
+        <app-item-product
+          *ngFor="let producto of productosFiltrados"
+          [producto]="producto"
+          (productSelected)="goToDetail($event)"
+        >
+        </app-item-product>
+      </ion-content>
     </ion-tab>
 
     <ion-tab tab="menu">
-        <app-header title="Servicios" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
-        <ion-content>
-          <app-layout>
-            <ion-card>
-              <img alt="Silhouette of mountains" src="../../assets/icon/pizza.png"/>
-              <ion-card-header>
-                <ion-card-title>Restaurante</ion-card-title>
-              </ion-card-header>
-              <ion-button fill="clear" (click)="openModal(titleRestaurant, productosFiltrados)">Ver más</ion-button>
-            </ion-card>
-            <ion-card>
-              <img alt="Silhouette of mountains" src="../../assets/icon/bebida.png"/>
-              <ion-card-header>
-                <ion-card-title>Bebidas</ion-card-title>
-              </ion-card-header>
-              <ion-button fill="clear" (click)="openModal(titleDrink, productosFiltrados)" title="Bebidas">Ver más</ion-button>
-            </ion-card>
-            <ion-card>
-              <img alt="Silhouette of mountains" src="../../assets/icon/panaderia.png"/>
-              <ion-card-header>
-                <ion-card-title>Panaderia</ion-card-title>
-              </ion-card-header>
-              <ion-button fill="clear" (click)="openModal(titleBread, productosFiltrados)" title="Panaderia">Ver más</ion-button>
-            </ion-card>
-          </app-layout>
-        </ion-content>
+      <app-header
+        title="Servicios"
+        [mostrar]="false"
+        [mostrarBtnModal]="false"
+      ></app-header>
+      <ion-content>
+        <app-layout>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="../../assets/icon/pizza.png"
+            />
+            <ion-card-header>
+              <ion-card-title>Restaurante</ion-card-title>
+            </ion-card-header>
+            <ion-button
+              fill="clear"
+              (click)="openModal(titleRestaurant, productosFiltrados)"
+              >Ver más</ion-button
+            >
+          </ion-card>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="../../assets/icon/bebida.png"
+            />
+            <ion-card-header>
+              <ion-card-title>Bebidas</ion-card-title>
+            </ion-card-header>
+            <ion-button
+              fill="clear"
+              (click)="openModal(titleDrink, productosFiltrados)"
+              title="Bebidas"
+              >Ver más</ion-button
+            >
+          </ion-card>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="../../assets/icon/panaderia.png"
+            />
+            <ion-card-header>
+              <ion-card-title>Panaderia</ion-card-title>
+            </ion-card-header>
+            <ion-button
+              fill="clear"
+              (click)="openModal(titleBread, productosFiltrados)"
+              title="Panaderia"
+              >Ver más</ion-button
+            >
+          </ion-card>
+        </app-layout>
+      </ion-content>
     </ion-tab>
 
     <ion-tab tab="favorites">
-      <app-header title="Favoritos" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
-  <ion-content>
-    <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
-      <app-item-product 
-        *ngFor="let producto of favoritos" 
-        [producto]="producto" >
-      </app-item-product>
-    </ion-list>
+      <app-header
+        title="Favoritos"
+        [mostrar]="false"
+        [mostrarBtnModal]="false"
+      ></app-header>
+      <ion-content>
+        <ion-list *ngIf="favoritos.length > 0; else noFavoritos">
+          <app-item-product
+            *ngFor="let producto of favoritos"
+            [producto]="producto"
+          >
+          </app-item-product>
+        </ion-list>
 
-    <ng-template #noFavoritos>
-      <div class="empty-favorites">
-        <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
-        <p>No hay productos en favoritos. Agrega algunos productos.</p>
-      </div>
-    </ng-template>
-  </ion-content>
+        <ng-template #noFavoritos>
+          <div class="empty-favorites">
+            <ion-icon
+              name="alert-circle-outline"
+              class="warning-icon"
+            ></ion-icon>
+            <p>No hay productos en favoritos. Agrega algunos productos.</p>
+          </div>
+        </ng-template>
+      </ion-content>
     </ion-tab>
-    
-    
 
     <ion-tab tab="account">
-        <app-header title="Perfil" [mostrar]="false" [mostrarBtnModal]="false"></app-header>
-        <ion-content>
-          <form [formGroup]="userForm">
-            <div class="contenidoImagen">
-              <ion-avatar class="profile-avatar">
-                <img alt="Silhouette of a person's head" [src]="profileImage" />
-                <ion-fab  class="fab-custom-position" vertical="bottom" horizontal="end">
-                  <ion-fab-button color="success" (click)="takePhoto()">
-                    <ion-icon name="camera-outline" color="dark"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>  
-              </ion-avatar>
-            </div>
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title style="text-align: center;">
-                  <strong>Datos Personales</strong>
-                </ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list lines="full">
-                  <ion-item>
-                    <app-custom-input
-                    icon="person"
-                    [control]="userForm.controls.names"
-                    type="text"
-                    label="Nombres"
-                    [errorText]="getErrorMessage('names')">
-                  </app-custom-input>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label position="floating">Apellidos</ion-label>
-                    <ion-input type="text" required></ion-input>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label position="floating">Correo Electrónico</ion-label>
-                    <ion-input type="email" required></ion-input>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label position="floating">Teléfono</ion-label>
-                    <ion-input type="tel"></ion-input>
-                  </ion-item>
-                </ion-list>
-                <ion-button expand="block" type="submit" class="ion-margin-top">Guardar Cambios</ion-button>
-              </ion-card-content>
-            </ion-card>
-          
-            <ion-note class="ion-padding">
-              Asegúrate de revisar tus datos antes de guardarlos. Todos los campos marcados con * son obligatorios.
-            </ion-note>
-          </form>
-        </ion-content>
+      <app-header
+        title="Perfil"
+        [mostrar]="false"
+        [mostrarBtnModal]="false"
+      ></app-header>
+      <ion-content>
+        <form [formGroup]="userForm">
+          <div class="contenidoImagen">
+            <ion-avatar class="profile-avatar">
+              <img alt="Silhouette of a person's head" [src]="profileImage" />
+              <ion-fab
+                class="fab-custom-position"
+                vertical="bottom"
+                horizontal="end"
+              >
+                <ion-fab-button color="success" (click)="takePhoto()">
+                  <ion-icon name="camera-outline" color="dark"></ion-icon>
+                </ion-fab-button>
+              </ion-fab>
+            </ion-avatar>
+          </div>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title class="ion-text-center">
+                <strong>Datos de cuenta</strong>
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-list lines="full">
+                <app-custom-input
+                  icon="mail"
+                  [control]="userForm.controls.email"
+                  type="email"
+                  label="Correo electrónico"
+                  [errorText]="getErrorMessage('email')"
+                >
+                </app-custom-input>
+
+                <app-custom-input
+                  [eyeToggle]="true"
+                  [iconInput]="false"
+                  [control]="userForm.controls.password"
+                  type="password"
+                  label="Nueva contraseña"
+                  [errorText]="getErrorMessage('password')"
+                >
+                </app-custom-input>
+                <app-custom-input
+                  [eyeToggle]="true"
+                  [iconInput]="false"
+                  [control]="userForm.controls.password"
+                  type="password"
+                  label="Confirmar contraseña"
+                  [errorText]="getErrorMessage('password')"
+                >
+                </app-custom-input>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title class="ion-text-center">
+                <strong>Datos personales</strong>
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-list lines="full">
+                <app-custom-input
+                  icon="person"
+                  [control]="userForm.controls.names"
+                  type="text"
+                  label="Nombres"
+                  [errorText]="getErrorMessage('names')"
+                >
+                </app-custom-input>
+
+                <app-custom-input
+                  icon="person"
+                  [control]="userForm.controls.apellido_paterno"
+                  type="text"
+                  label="Apellido Paterno"
+                  [errorText]="getErrorMessage('apellido_paterno')"
+                >
+                </app-custom-input>
+
+                <app-custom-input
+                  icon="person"
+                  [control]="userForm.controls.apellido_materno"
+                  type="text"
+                  label="Apellido Materno"
+                  [errorText]="getErrorMessage('apellido_materno')"
+                >
+                </app-custom-input>
+
+                <app-custom-input
+                  icon="call"
+                  [control]="userForm.controls.telefono"
+                  type="tel"
+                  label="Teléfono"
+                  [errorText]="getErrorMessage('telefono')"
+                >
+                </app-custom-input>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="ion-margin-top"
+            mode="ios"
+            (click)="guardarCambios()"
+          >
+            Guardar Cambios
+          </ion-button>
+
+          <ion-note class="ion-padding">
+            Asegúrate de revisar tus datos antes de guardarlos. Todos los campos
+            marcados con * son obligatorios.
+          </ion-note>
+        </form>
+      </ion-content>
     </ion-tab>
-    
 
     <ion-tab-bar slot="bottom" color="primary">
       <ion-tab-button tab="home">

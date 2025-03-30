@@ -16,6 +16,7 @@ export class HeaderComponent  implements OnInit {
   @Input() showLogout: boolean = true; // Controla la visibilidad del botón
   @Input() mostrar: boolean = true;
   @Input() mostrarBtnModal: boolean = true;
+  @Output() onLogout = new EventEmitter<void>();
 
   constructor(private alertController: AlertController,
     private toastController: ToastController, private route: Router, private userServices: UsuarioService) { }
@@ -39,6 +40,7 @@ export class HeaderComponent  implements OnInit {
           handler: () => {
             console.log('Cerrando sesión...');
             this.userServices.logOut();
+            this.onLogout.emit();
             this.presentToast('Sesión cerrada.', 'success').then(() => {
               this.route.navigate(['/login']); // Navega al login después de mostrar el toast
             });

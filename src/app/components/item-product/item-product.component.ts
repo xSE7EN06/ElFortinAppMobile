@@ -49,7 +49,8 @@ export class ItemProductComponent implements OnInit {
     this.productService.toggleCart(this.producto);
   }
 
-  onProductClick() {
+  onProductClick(event: any) {
     this.productSelected.emit(this.producto);
+    event.target.closest('ion-modal').dismiss();
   }
 }
